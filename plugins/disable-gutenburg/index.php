@@ -1,4 +1,10 @@
 <?php
+/**
+ * Plugin Name: Disable Gutenberg
+ * Description: This plugin will disable all Gutenberg (Block editor) related things in the backend.
+ * Version: 1.0
+ */
+
 // Credit: https://metabox.io/disable-gutenberg-without-using-plugins/
 
 // Disable Gutenberg on the back end.
