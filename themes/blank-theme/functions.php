@@ -1,14 +1,15 @@
 <?php
+include get_theme_file_path( '/assets/php/acf.php' );
 include get_theme_file_path( '/assets/php/features.php' );
 
 /* Hide ADMIN-BAR */
-add_filter('show_admin_bar', '__return_false');
+add_filter( 'show_admin_bar', '__return_false' );
 
-add_action('wp_enqueue_scripts', function() {
+add_action( 'wp_enqueue_scripts', function() {
   wp_enqueue_style( 'reset', get_theme_file_uri( 'assets/css/reset.css' ) );
   wp_enqueue_style( 'main', get_theme_file_uri( 'assets/css/main.css' ) );
 } );
 
-add_action('get_footer', {
+add_action( 'get_footer', function() {
   wp_enqueue_script( 'main', get_theme_file_uri( 'assets/js/main.js' ), array(), "1.0", TRUE );
 } );
