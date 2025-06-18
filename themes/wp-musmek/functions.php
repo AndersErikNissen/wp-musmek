@@ -2,6 +2,7 @@
 /* Hide ADMIN-BAR */
 add_filter( 'show_admin_bar', '__return_false' );
 
+include get_theme_file_path( '/assets/php/redirects.php' );
 include get_theme_file_path( '/assets/php/acf.php' );
 include get_theme_file_path( '/assets/php/features.php' );
 

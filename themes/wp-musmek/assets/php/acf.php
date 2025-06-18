@@ -32,3 +32,10 @@ function custom_acf_json_save_paths( $paths, $post ) {
   return $paths;
 }
 add_filter( 'acf/json/save_paths', 'custom_acf_json_save_paths', 10, 2 );
+
+add_filter( 'acf/settings/load_json', function ( $directories ) {
+	$directories[] = get_stylesheet_directory() . '/acf-json/options';
+	$directories[] = get_stylesheet_directory() . '/acf-json/sections';
+
+	return $directories;
+} );

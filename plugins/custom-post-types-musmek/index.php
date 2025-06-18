@@ -6,8 +6,8 @@
  * Version: 1.0
  */
 
-function generate_custom_post_types() {
-  register_post_type('case', 
+add_action( 'init', function() {
+  register_post_type('anmeldelse', 
     array(
       'labels' => array(
         'name'          => __('Anmeldelser', 'textdomain'),
@@ -22,6 +22,20 @@ function generate_custom_post_types() {
       'taxonomies'   => array ( 'category', 'post_tag' ),
     )   
   );
-}
 
-add_action('init','generate_custom_post_types');
+  register_post_type('ydelse', 
+    array(
+      'labels' => array(
+        'name'          => __('Ydelser', 'textdomain'),
+        'singular_name' => __('Ydelse', 'textdomain'),
+      ),
+      'public'       => true,
+      'has_archive'  => true,
+      'show_in_rest' => true,
+      'menu_icon'    => 'dashicons-open-folder',
+      'rest_base'    => 'ydelser',
+      'supports'     => array ( 'title', 'thumbnail', 'custom-fields' ),
+      'taxonomies'   => array ( 'category', 'post_tag' ),
+    )   
+  );
+} );
