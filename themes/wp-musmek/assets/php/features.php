@@ -15,6 +15,10 @@ add_action( 'after_setup_theme', function() {
 
   add_theme_support( 'title-tag' );
   add_theme_support( 'post-thumbnails' ); 
+
+  // Custom images sizes
+  add_image_size( 'small-medium', 768);
+  add_image_size( 'medium-large', 1920);
 } );
 
 add_action('admin_init', function() {
