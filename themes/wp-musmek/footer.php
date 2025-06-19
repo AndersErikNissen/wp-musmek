@@ -1,5 +1,11 @@
       </main>
-      <?php get_template_part( 'template-parts/snippets/the-footer' ); ?>
+      
+      <footer class="snippet-the-footer">
+        <?php wp_nav_menu( array (
+          'menu_class' => 'footer-menu',
+          'container'  => false
+        ) ); ?>
+      </footer>
     </div>
     <?php wp_footer(); ?>
   </body>

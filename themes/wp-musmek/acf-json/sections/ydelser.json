@@ -1,11 +1,11 @@
 {
-    "key": "group_685337a297c03",
-    "title": "Sektion: Tekst",
+    "key": "group_68546d54b0e2a",
+    "title": "Sektion: Ydelser",
     "fields": [
         {
-            "key": "field_685337a2c0702",
+            "key": "field_68546d54b2e18",
             "label": "Titel",
-            "name": "titel",
+            "name": "section_services_title",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -24,9 +24,9 @@
             "append": ""
         },
         {
-            "key": "field_685337bdc0703",
+            "key": "field_68546d54b2e22",
             "label": "Beskrivelse",
-            "name": "beskrivelse",
+            "name": "section_services_description",
             "aria-label": "",
             "type": "textarea",
             "instructions": "",
@@ -45,9 +45,9 @@
             "new_lines": ""
         },
         {
-            "key": "field_68533804a6f40",
+            "key": "field_68546d54b2e28",
             "label": "Knap",
-            "name": "knap",
+            "name": "section_services_button",
             "aria-label": "",
             "type": "link",
             "instructions": "",
@@ -62,11 +62,11 @@
             "allow_in_bindings": 0
         },
         {
-            "key": "field_6853398ca6f41",
-            "label": "Billede",
-            "name": "billede",
+            "key": "field_68546e0840701",
+            "label": "Ydelser",
+            "name": "section_services_services",
             "aria-label": "",
-            "type": "image",
+            "type": "post_object",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -75,25 +75,26 @@
                 "class": "",
                 "id": ""
             },
-            "return_format": "array",
-            "library": "all",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": "",
+            "post_type": [
+                "ydelse"
+            ],
+            "post_status": "",
+            "taxonomy": "",
+            "return_format": "object",
+            "multiple": 1,
+            "allow_null": 0,
             "allow_in_bindings": 0,
-            "preview_size": "medium"
+            "bidirectional": 0,
+            "ui": 1,
+            "bidirectional_target": []
         }
     ],
     "location": [
         [
             {
-                "param": "post_type",
+                "param": "page",
                 "operator": "==",
-                "value": "page"
+                "value": "151"
             },
             {
                 "param": "page",
@@ -104,12 +105,12 @@
     ],
     "menu_order": 0,
     "position": "normal",
-    "style": "seamless",
+    "style": "default",
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1750286719
+    "modified": 1750372655
 }

@@ -1,6 +1,17 @@
 <?php
   get_header();
 
-  // Code goes here...
+  if ( have_posts() ) :
+
+    while ( have_posts() ) :
+      the_post();
+
+      if ( is_front_page() ) :
+        get_template_part( 'template-parts/sections/text', true );
+      endif;
+
+    endwhile;
+
+  endif;
 
   get_footer();

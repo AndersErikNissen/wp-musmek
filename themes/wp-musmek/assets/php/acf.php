@@ -6,10 +6,17 @@ function custom_acf_json_filename( $filename, $post, $load_path ) {
       array(
           ' ',
           '_',
+          ':',
+          'Sektion',
+          'Section',
+
       ),
       array(
           '-',
-          '-'
+          '-',
+          '',
+          '',
+          '',
       ),
       $post['title']
   );
@@ -24,18 +31,13 @@ function custom_acf_json_save_paths( $paths, $post ) {
   if ( preg_match( '/(sektion|section)/i', $post['title'] ) ) {
     $paths = array( get_stylesheet_directory() . '/acf-json/sections' );
   }
-  
-  if ( preg_match( '/(indstilling[er]*|option[s]*)/i', $post['title'] ) ) {
-    $paths = array( get_stylesheet_directory() . '/acf-json/options' );
-  }
 
   return $paths;
 }
 add_filter( 'acf/json/save_paths', 'custom_acf_json_save_paths', 10, 2 );
 
-add_filter( 'acf/settings/load_json', function ( $directories ) {
-	$directories[] = get_stylesheet_directory() . '/acf-json/options';
-	$directories[] = get_stylesheet_directory() . '/acf-json/sections';
+add_filter( 'acf/settings/load_json', function ( $paths ) {
+	$paths[] = get_stylesheet_directory() . '/acf-json/sections';
 
-	return $directories;
+	return $paths;
 } );

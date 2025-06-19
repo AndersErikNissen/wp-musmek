@@ -5,6 +5,7 @@ add_filter( 'show_admin_bar', '__return_false' );
 include get_theme_file_path( '/assets/php/redirects.php' );
 include get_theme_file_path( '/assets/php/acf.php' );
 include get_theme_file_path( '/assets/php/features.php' );
+include get_theme_file_path( '/assets/php/globals.php' );
 
 add_action( 'wp_enqueue_scripts', function() {
   wp_enqueue_style( 'reset', get_theme_file_uri( 'assets/css/reset.css' ) );
