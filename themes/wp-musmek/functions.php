@@ -10,6 +10,7 @@ include get_theme_file_path( '/assets/php/globals.php' );
 add_action( 'wp_enqueue_scripts', function() {
   wp_enqueue_style( 'reset', get_theme_file_uri( 'assets/css/reset.css' ) );
   wp_enqueue_style( 'main', get_theme_file_uri( 'assets/css/main.css' ) );
+  wp_enqueue_style( 'fonts', get_theme_file_uri( 'assets/css/fonts.css' ) );
 } );
 
 add_action( 'get_footer', function() {

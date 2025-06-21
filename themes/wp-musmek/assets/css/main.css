@@ -1,0 +1,21 @@
+body {
+}
+
+.section {
+  margin: 4rem 0;
+}
+
+[class^="cols"] {
+  margin: 0 auto;
+  max-width: calc((var(--max-width, 100%) - ((var(--cols, 12) - 1) * 1rem)) / 12 * var(--cols, 12));
+}
+
+.cols-6 {
+  --cols: 6;
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --max-width: 1920px;
+  }
+}

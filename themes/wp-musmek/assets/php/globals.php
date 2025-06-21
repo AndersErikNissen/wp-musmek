@@ -16,3 +16,15 @@ function get_section_data( $path, $post_id ) {
 
   return $data;
 }
+
+function settings() {
+  $fields = get_fields( get_page_by_path( 'indstillinger' )->ID );
+  
+  foreach ( $fields as $key => $value ) {
+    if ( str_contains( $key, 'logo' ) ) {
+
+    }
+  }
+
+  return $fields;
+}

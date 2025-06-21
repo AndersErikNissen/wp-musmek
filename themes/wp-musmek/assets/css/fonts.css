@@ -1,0 +1,76 @@
+/*
+  @license
+  
+  Font Family: Outfit
+  Designed by: On Brand Investments Pty Ltd, Rodrigo Fuenzalida
+  URL: https://www.fontshare.com/fonts/outfit
+  © 2025 Indian Type Foundry
+*/
+
+@font-face {
+  font-family: "Outfit";
+  src: url("../fonts/Outfit-Light.woff2") format("woff2"), url("../fonts/Outfit-Light.woff") format("woff"),
+    url("../fonts/Outfit-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("../fonts/Outfit-Regular.woff2") format("woff2"), url("../fonts/Outfit-Regular.woff") format("woff"),
+    url("../fonts/Outfit-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("../fonts/Outfit-Bold.woff2") format("woff2"), url("../fonts/Outfit-Bold.woff") format("woff"),
+    url("../fonts/Outfit-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("../fonts/Outfit-ExtraBold.woff2") format("woff2"), url("../fonts/Outfit-ExtraBold.woff") format("woff"),
+    url("../fonts/Outfit-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-display: swap;
+  font-style: normal;
+}
+
+body {
+  font-family: "Outfit", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* TEXT */
+/* TEXT */
+/* TEXT */
+
+.h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+}
+
+.p,
+.p-large {
+  line-height: 1.45;
+}
+
+.p-large {
+  font-size: 1.25rem;
+}
+/* UTILITIES */
+/* UTILITIES */
+/* UTILITIES */
+
+.text-center {
+  text-align: center;
+}
