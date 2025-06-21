@@ -23,7 +23,7 @@
         {
             "key": "field_68532b63d4319",
             "label": "Bestil tid link",
-            "name": "bestil_tid_link",
+            "name": "booking_link",
             "aria-label": "",
             "type": "url",
             "instructions": "",
@@ -41,7 +41,7 @@
         {
             "key": "field_68532f4cfa980",
             "label": "Kontakt",
-            "name": "kontakt",
+            "name": "contact",
             "aria-label": "",
             "type": "group",
             "instructions": "Kun felter som er udfyldt vises.",
@@ -57,7 +57,7 @@
                 {
                     "key": "field_68532f57fa981",
                     "label": "Telefon",
-                    "name": "telefon",
+                    "name": "tlf",
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
@@ -136,7 +136,7 @@
         {
             "key": "field_68533cfd36a03",
             "label": "Adresser",
-            "name": "adresser",
+            "name": "addresses",
             "aria-label": "",
             "type": "group",
             "instructions": "",
@@ -168,7 +168,7 @@
                         {
                             "key": "field_68533d2f36a05",
                             "label": "Vej og nr.",
-                            "name": "vej_og_nr",
+                            "name": "street_and_nr",
                             "aria-label": "",
                             "type": "text",
                             "instructions": "",
@@ -189,7 +189,7 @@
                         {
                             "key": "field_68533d4536a06",
                             "label": "Bykode og by",
-                            "name": "bykode_og_by",
+                            "name": "citycode_and_city",
                             "aria-label": "",
                             "type": "text",
                             "instructions": "",
@@ -239,7 +239,7 @@
                         {
                             "key": "field_685343d1239f1",
                             "label": "Vej og nr.",
-                            "name": "vej_og_nr",
+                            "name": "street_and_nr",
                             "aria-label": "",
                             "type": "text",
                             "instructions": "",
@@ -260,7 +260,7 @@
                         {
                             "key": "field_685343d1239f2",
                             "label": "Bykode og by",
-                            "name": "bykode_og_by",
+                            "name": "citycode_and_city",
                             "aria-label": "",
                             "type": "text",
                             "instructions": "",
@@ -318,7 +318,7 @@
                         {
                             "key": "field_685343ea239f5",
                             "label": "Vej og nr.",
-                            "name": "vej_og_nr",
+                            "name": "street_and_nr",
                             "aria-label": "",
                             "type": "text",
                             "instructions": "",
@@ -339,7 +339,7 @@
                         {
                             "key": "field_685343ea239f6",
                             "label": "Bykode og by",
-                            "name": "bykode_og_by",
+                            "name": "citycode_and_city",
                             "aria-label": "",
                             "type": "text",
                             "instructions": "",
@@ -398,7 +398,7 @@
                 {
                     "key": "field_68532bc1d431c",
                     "label": "Vektor",
-                    "name": "vektor",
+                    "name": "vector",
                     "aria-label": "",
                     "type": "textarea",
                     "instructions": "",
@@ -419,7 +419,7 @@
                 {
                     "key": "field_68532bcbd431d",
                     "label": "Billede",
-                    "name": "billede",
+                    "name": "image",
                     "aria-label": "",
                     "type": "image",
                     "instructions": "",
@@ -430,7 +430,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "return_format": "array",
+                    "return_format": "id",
                     "library": "all",
                     "min_width": "",
                     "min_height": "",
@@ -481,7 +481,7 @@
                 {
                     "key": "field_68532d220ed36",
                     "label": "Vektor",
-                    "name": "vektor",
+                    "name": "vector",
                     "aria-label": "",
                     "type": "textarea",
                     "instructions": "",
@@ -502,7 +502,7 @@
                 {
                     "key": "field_68532d220ed37",
                     "label": "Billede",
-                    "name": "billede",
+                    "name": "image",
                     "aria-label": "",
                     "type": "image",
                     "instructions": "",
@@ -513,7 +513,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "return_format": "array",
+                    "return_format": "id",
                     "library": "all",
                     "min_width": "",
                     "min_height": "",
@@ -547,27 +547,6 @@
             "rows": "",
             "placeholder": "",
             "new_lines": ""
-        },
-        {
-            "key": "field_68548ea3d1644",
-            "label": "TEst",
-            "name": "test",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
         }
     ],
     "location": [
@@ -575,7 +554,7 @@
             {
                 "param": "page",
                 "operator": "==",
-                "value": "34"
+                "value": "6"
             }
         ]
     ],
@@ -588,5 +567,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1750372006
+    "modified": 1750531905
 }

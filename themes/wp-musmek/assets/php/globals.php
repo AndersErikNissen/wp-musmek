@@ -17,14 +17,31 @@ function get_section_data( $path, $post_id ) {
   return $data;
 }
 
-function settings() {
+function get_option_fields() {
   $fields = get_fields( get_page_by_path( 'indstillinger' )->ID );
-  
-  foreach ( $fields as $key => $value ) {
-    if ( str_contains( $key, 'logo' ) ) {
 
+  $data = array();
+
+  // Pick and format each logo
+  foreach ( $fields as $key => $value ) {
+    if ( str_contains( $key, '_logo' ) ) {
+      $logo = $fields[$key]['vector'] || false;
+
+      if ( !$logo ) {
+        $logo_img = $fields[$key]['image'];
+
+        if ( $logo_img ) {
+          $logo = wp_get_attachment_image( $logo_img, 'thumbnail', false, array(
+            'loading' => 'eager',
+          ) );
+        }
+      }
+
+      $data[$key] = $logo;
+    } else {
+      $data[$key] = $value;
     }
   }
 
-  return $fields;
+  return $data;
 }
