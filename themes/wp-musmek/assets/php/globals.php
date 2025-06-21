@@ -25,7 +25,7 @@ function get_option_fields() {
   // Pick and format each logo
   foreach ( $fields as $key => $value ) {
     if ( str_contains( $key, '_logo' ) ) {
-      $logo = $fields[$key]['vector'] || false;
+      $logo = $fields[$key]['vector'];
 
       if ( !$logo ) {
         $logo_img = $fields[$key]['image'];
@@ -35,6 +35,10 @@ function get_option_fields() {
             'loading' => 'eager',
           ) );
         }
+      }
+
+      if ( !$logo ) {
+        $logo = false;
       }
 
       $data[$key] = $logo;

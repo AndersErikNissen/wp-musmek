@@ -1,18 +1,19 @@
 <?php 
   $options = get_option_fields();
 
-  
+  $logo = $options['header_logo'];
 ?>
-<pre><?php print_r($options); ?></pre>
-<header class="snippet-the-header">
+<header class="p-the-header">
   <nav>
-    <div>
-      <!-- <?php get_template_part( 'template-parts/parts/logo', null, array ( 'logo' => $options['header_logo'] )); ?> -->
-      <a class="" href="/"></a>
+    <?php if ( $logo ) : ?>
+    <div class="p-the-header__logo">
+      <?php echo $logo; ?>
+      <a class="cover" href="/"></a>
     </div>
+    <?php endif; ?>
 
     <?php wp_nav_menu( array (
-      'menu_class' => '',
+      'menu_class' => 'p-the-header__menu',
       'container'  => false
     ) ); ?>
   </nav>
