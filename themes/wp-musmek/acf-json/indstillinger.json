@@ -530,7 +530,7 @@
         {
             "key": "field_68532ef0af258",
             "label": "Beskrivelse",
-            "name": "footer_beskrivelse",
+            "name": "footer_description",
             "aria-label": "",
             "type": "textarea",
             "instructions": "",
@@ -567,5 +567,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1750531905
+    "modified": 1750531906
 }

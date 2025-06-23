@@ -1,6 +1,7 @@
 :root {
   --color-black: #111111;
   --color-white: #FFFFFF;
+  --color-grey: #D2D2D2;
   --color-orange: #F4A436;
 }
 
@@ -48,9 +49,10 @@
   color: var(--color-orange);
 }
 
-[class^="cols"] {
+.cols-6,
+.cols-full {
   margin: 0 auto;
-  max-width: calc((var(--max-width, 100%) - ((var(--cols, 12) - 1) * 1rem)) / 12 * var(--cols, 12));
+  max-width: calc(((var(--max-width, 100%) - ((var(--cols, 12) - 1) * 1rem)) / 12 * var(--cols, 12)) + ((var(--cols, 12) - 1) * 1rem));
 }
 
 .cols-6 {

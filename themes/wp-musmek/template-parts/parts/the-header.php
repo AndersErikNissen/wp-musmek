@@ -48,5 +48,31 @@
       'menu_class' => 'mobile-menu__menu',
       'container'  => 'ul'
     ) ); ?>
+
+    <ul class="mobile-menu__contact">
+      <?php if ( $options['contact']['tlf'] ) : ?>
+        <li class="mobile-menu__contact-item">
+          <a href="tel:<?php echo $options['contact']['tlf']; ?>">Telefon</a>
+        </li>
+      <?php endif; ?>
+
+      <?php if ( $options['contact']['email'] ) : ?>
+        <li class="mobile-menu__contact-item">
+          <a href="mailto:<?php echo $options['contact']['email']; ?>">Email</a>
+        </li>
+      <?php endif; ?>
+
+      <?php if ( $options['contact']['instagram'] ) : ?>
+        <li class="mobile-menu__contact-item">
+          <a href="<?php echo $options['contact']['instagram']; ?>" target="_blank">Instagram</a>
+        </li>
+      <?php endif; ?>
+
+      <?php if ( $options['contact']['facebook'] ) : ?>
+        <li class="mobile-menu__contact-item">
+          <a href="<?php echo $options['contact']['facebook']; ?>" target="_blank">Facebook</a>
+        </li>
+      <?php endif; ?>
+    </ul>
   </div>
 </div>
