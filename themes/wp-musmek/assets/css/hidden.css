@@ -1,0 +1,17 @@
+@media (min-width: 976px) {
+  .hidden-desktop {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .hidden-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 975px) {
+  .hidden-tablet {
+    display: none;
+  }
+}

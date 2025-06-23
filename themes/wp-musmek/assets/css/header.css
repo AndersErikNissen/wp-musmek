@@ -1,0 +1,236 @@
+.p-the-header {
+  position: sticky;
+  top: 0;
+  padding: 1.25rem;
+  z-index: 9999;
+  background-color: var(--color-white);
+}
+
+.p-the-header__content {
+  display: flex;
+}
+
+.p-the-header__logo-wrapper,
+.p-the-header__btns {
+  flex: 1 1 100%;
+}
+
+.p-the-header__logo-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.p-the-header__logo {
+  position: relative;
+}
+
+.p-the-header__logo svg,
+.p-the-header__logo img {
+  width: 100px;
+  height: auto;
+}
+
+.p-the-header__menu {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.p-the-header__btns {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.p-the-header__btns > * {
+  flex: 0 0 auto;
+}
+
+.menu-btn {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.menu-btn__label-wrapper {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.menu-btn__label {
+  display: inline-block;
+  position: relative;
+  padding: 0.1rem 0;
+  font-weight: 300;
+  /* text-transform: uppercase; */
+}
+
+.menu-btn__label > span {
+  display: inline-block;
+  transform: translateY(-3.5%);
+}
+
+.menu-btn__label > span:nth-child(1) {
+  position: absolute;
+  top: calc(0.1rem * -1);
+  right: 0;
+  transform: translateY(-103.5%);
+}
+
+body.transition-mobile-menu .menu-btn__label {
+  transform: translateY(100%);
+}
+
+body.use-transitions .menu-btn__label {
+  transition: transform 300ms ease-in;
+}
+
+.menu-btn-icon {
+  height: 1.25rem;
+  width: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-btn-icon > div {
+  height: 1px;
+  width: 90%;
+  background-color: var(--color-black);
+  left: 5%;
+}
+
+body.use-transitions .menu-btn-icon > div {
+  transition: transform 300ms ease-in;
+}
+
+.menu-btn-icon > .top {
+  position: absolute;
+  top: 0.15rem;
+}
+
+.menu-btn-icon > .center-1,
+.menu-btn-icon > .center-2 {
+  position: absolute;
+  transform-origin: center;
+  top: calc(50% - 0.5px);
+}
+
+.menu-btn-icon > .bottom {
+  position: absolute;
+  bottom: 0.15rem;
+}
+
+body.transition-mobile-menu .menu-btn-icon > .top {
+  transform: translateY(calc(1rem * -1));
+}
+
+body.transition-mobile-menu .menu-btn-icon > .center-1 {
+  transform: rotate(45deg);
+}
+
+body.transition-mobile-menu .menu-btn-icon > .center-2 {
+  transform: rotate(-45deg);
+}
+
+body.transition-mobile-menu .menu-btn-icon > .bottom {
+  transform: translateY(1rem);
+}
+
+body:not(.active-mobile-menu) .mobile-menu {
+  display: none;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 66px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 66px);
+  overflow: hidden;
+  z-index: 1;
+}
+
+body.transition-mobile-menu .mobile-menu {
+  background-color: rgba(0,0,0,0.25);
+  backdrop-filter: blur(15px);
+}
+
+body.use-transitions .mobile-menu {
+  transition: background-color 500ms ease-in;
+}
+
+.mobile-menu__content {
+  background-color: var(--color-white);
+  padding: 1.25rem 1.25rem calc(1.25rem + 66px);
+  transform: translateY(-101%);
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+body.transition-mobile-menu .mobile-menu__content {
+  transform: translateY(0%);
+}
+
+body.use-transitions .mobile-menu__content {
+  transition: transform 400ms ease-in;
+}
+
+.mobile-menu__menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.mobile-menu__menu .menu-item {
+  overflow: hidden;
+  padding: 0.5rem 0;
+}
+
+.mobile-menu__menu .menu-item a {
+  display: inline-block;
+  transform: translateY(calc(-125% - 0.5rem));
+}
+
+body.transition-mobile-menu .mobile-menu__menu .menu-item a {
+  transform: translateY(0%);
+  transition: transform 300ms ease-in;
+}
+
+/* Not pretty... but it works */
+body.transition-mobile-menu .mobile-menu__menu .menu-item:nth-child(1) a {
+  transition-delay: 450ms;
+}
+
+body.transition-mobile-menu .mobile-menu__menu .menu-item:nth-child(2) a {
+  transition-delay: 500ms;
+}
+
+body.transition-mobile-menu .mobile-menu__menu .menu-item:nth-child(3) a {
+  transition-delay: 550ms;
+}
+
+body.transition-mobile-menu .mobile-menu__menu .menu-item:nth-child(4) a {
+  transition-delay: 600ms;
+}
+
+body.transition-mobile-menu .mobile-menu__menu .menu-item:nth-child(5) a {
+  transition-delay: 650ms;
+}
+
+body.transition-mobile-menu .mobile-menu__menu .menu-item:nth-child(6) a {
+  transition-delay: 700ms;
+}
+
+@media (min-width: 976px) {
+  .p-the-header__logo svg,
+  .p-the-header__logo img {
+    width: 132px;
+    height: auto;
+  }
+}
