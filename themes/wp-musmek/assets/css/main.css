@@ -50,6 +50,7 @@
 }
 
 .cols-6,
+.cols-10,
 .cols-full {
   margin: 0 auto;
   max-width: calc(((var(--max-width, 100%) - ((var(--cols, 12) - 1) * 1rem)) / 12 * var(--cols, 12)) + ((var(--cols, 12) - 1) * 1rem));
@@ -57,6 +58,10 @@
 
 .cols-6 {
   --cols: 6;
+}
+
+.cols-10 {
+  --cols: 10;
 }
 
 .cols-full {
