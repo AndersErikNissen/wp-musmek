@@ -27,7 +27,7 @@
   text-align: center;
   padding: 1rem 1.8rem;
   border-radius: 0.25rem;
-  transition: color 300ms ease-in, background-color 300ms ease-in;
+  transition: border-radius 300ms ease-in, background-color 300ms ease-in;
   color: var(--color-black);
 }
 
@@ -42,18 +42,15 @@
 
 .btn:hover,
 .btn--cta:hover {
-  background-color: transparent;
-}
-
-.btn--cta:hover {
-  color: var(--color-orange);
+  border-radius: 1rem;
 }
 
 .cols-6,
 .cols-10,
 .cols-full {
   margin: 0 auto;
-  max-width: calc(((var(--max-width, 100%) - ((var(--cols, 12) - 1) * 1rem)) / 12 * var(--cols, 12)) + ((var(--cols, 12) - 1) * 1rem));
+  max-width: 100%;
+  padding: 0 0.75rem;
 }
 
 .cols-6 {
@@ -66,6 +63,15 @@
 
 .cols-full {
   --cols: 12;
+}
+
+@media (min-width: 768px) {
+  .cols-6,
+  .cols-10,
+  .cols-full {
+    max-width: calc(((var(--max-width, 100%) - ((var(--cols, 12) - 1) * 1rem)) / 12 * var(--cols, 12)) + ((var(--cols, 12) - 1) * 1rem));
+    padding: 0 1.25rem;
+  }
 }
 
 

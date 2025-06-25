@@ -1,7 +1,7 @@
 .p-the-header {
   position: sticky;
   top: 0;
-  padding: 1.25rem;
+  padding: 1.25rem 0;
   z-index: 9999;
   background-color: var(--color-white);
 }
@@ -264,7 +264,7 @@ body.transition-mobile-menu .mobile-menu__contact-item a {
   }
 }
 
-@media (min-width: 976px) {
+@media (min-width: 960px) {
   .p-the-header__logo svg,
   .p-the-header__logo img {
     width: 132px;

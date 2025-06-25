@@ -53,7 +53,7 @@
   }
 }
 
-@media (min-width: 976px) {
+@media (min-width: 960px) {
   .p-the-footer__main {
     flex-direction: row;
   }

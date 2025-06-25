@@ -54,7 +54,8 @@ body {
 /* TEXT */
 
 .h1 {
-  font-size: 3rem;
+  font-size: 2rem;
+  line-height: 1.15;
   font-weight: 800;
   margin-bottom: 1.5rem;
 }
@@ -64,9 +65,16 @@ body {
   line-height: 1.45;
 }
 
-.p-large {
-  font-size: 1.25rem;
+@media (min-width: 768px) {
+  .h1 {
+    font-size: 3rem;
+  }
+
+  .p-large {
+    font-size: 1.25rem;
+  }
 }
+
 /* UTILITIES */
 /* UTILITIES */
 /* UTILITIES */

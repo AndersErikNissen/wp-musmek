@@ -16,6 +16,14 @@ if ( $data ) : ?>
         <?php echo $data['description']; ?>
       </p>
     <?php endif; ?>
+
+    <?php if ( $data['button'] ) : ?>
+      <div class="section-text__btn">
+        <a class="btn" href="<?php echo $data['button']['url']; ?>" target="<?php echo $data['button']['target'] ?? '_self'; ?>">
+          <?php echo $data['button']['title']; ?>
+        </a>
+      </div>
+    <?php endif; ?>
   </div>
 </section>
 
