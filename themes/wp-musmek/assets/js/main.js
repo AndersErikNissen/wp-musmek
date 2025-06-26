@@ -39,13 +39,13 @@ function swipeGalleryOnScroll() {
   
   if (!gallery) return;
 
-  const images = gallery.querySelectorAll(".section-gallery__image-container");
+  const imageContainers = gallery.querySelectorAll(".section-gallery__image-container");
   const galleryWidth = gallery.getBoundingClientRect().width;
-  const imagesWidth = images[0].getBoundingClientRect().left + images[images.length - 1].getBoundingClientRect().right;
+  const imagesWidth = imageContainers[0].getBoundingClientRect().left + imageContainers[imageContainers.length - 1].getBoundingClientRect().right;
   
   if (galleryWidth >= imagesWidth) return;
 
-  const imageWrapper = gallery.querySelector(".section-gallery__wrapper");
+  const images = gallery.querySelector(".section-gallery__images");
 
   // Animation loop
   let ticking = false;
@@ -66,7 +66,7 @@ function swipeGalleryOnScroll() {
     if (cache !== progress) {
       cache = progress;
       const transformX = maxTransform / 100 * progress;
-      imageWrapper.style.transform = "translateX(-" + transformX + "px)";
+      images.style.transform = "translateX(-" + transformX + "px)";
       window.requestAnimationFrame(loop);
     } else {
       looping = false;

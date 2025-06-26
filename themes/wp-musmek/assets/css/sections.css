@@ -3,7 +3,6 @@
   padding: 4rem 0;
   display: grid;
   align-items: center;
-  height: 150vh;
 }
 
 .section-text__btn {
@@ -14,6 +13,10 @@
 }
 
 /* SECTION: GALLERY */
+.section-gallery {
+  
+}
+
 .section-gallery__wrapper {
   overflow: hidden;
   width: 100%;
