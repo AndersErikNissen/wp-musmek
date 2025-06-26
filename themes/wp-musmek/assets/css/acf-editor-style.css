@@ -1,0 +1,7 @@
+/* Can be found in the fields of the type WYSIWYG */
+#tinymce {
+  font-family: -apple-system, "system-ui", "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  color: rgb(44, 51, 56);
+  font-weight: 400;
+}

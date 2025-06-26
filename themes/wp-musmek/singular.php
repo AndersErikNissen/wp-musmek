@@ -8,6 +8,7 @@
       if ( is_front_page() ) :
         get_template_part( 'template-parts/sections/text' );
         get_template_part( 'template-parts/sections/gallery' );
+        get_template_part( 'template-parts/sections/services' );
       endif;
 
     endwhile;

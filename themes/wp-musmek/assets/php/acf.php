@@ -41,3 +41,7 @@ add_filter( 'acf/settings/load_json', function ( $paths ) {
 
 	return $paths;
 } );
+
+add_action( 'after_setup_theme', function() {
+  add_editor_style( get_theme_file_uri( 'assets/css/acf-editor-style.css' ) );
+} );

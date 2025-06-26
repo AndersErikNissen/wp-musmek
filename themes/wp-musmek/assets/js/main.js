@@ -44,10 +44,11 @@ function swipeGalleryOnScroll() {
   const imagesWidth = imageContainers[0].getBoundingClientRect().left + imageContainers[imageContainers.length - 1].getBoundingClientRect().right;
   
   if (galleryWidth >= imagesWidth) return;
-
-  const images = gallery.querySelector(".section-gallery__images");
-
+  
   // Animation loop
+  const images = gallery.querySelector(".section-gallery__images");
+  const heightDivider = 2; // If 2, the swiping starts when the top is at the middle of the viewport
+
   let ticking = false;
   let looping = false;
   let cache = 0;
@@ -60,13 +61,17 @@ function swipeGalleryOnScroll() {
 
   function loop() {
     const rect = gallery.getBoundingClientRect();
-    const current = 100 - ((rect.bottom - window.innerHeight) / rect.height * 100);
+    const current = 100 - ((rect.bottom - (window.innerHeight / heightDivider)) / rect.height * 100);
     const progress = clamp(lerp(cache, current, 0.5));
     
     if (cache !== progress) {
+      const transformString = "translateX(-" + (maxTransform / 100 * progress) + "px)";
+      
+      images.style.mozTransform = transformString;
+      images.style.webkitTransform = transformString;
+      images.style.transform = transformString;
+      
       cache = progress;
-      const transformX = maxTransform / 100 * progress;
-      images.style.transform = "translateX(-" + transformX + "px)";
       window.requestAnimationFrame(loop);
     } else {
       looping = false;
