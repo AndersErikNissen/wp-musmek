@@ -46,6 +46,13 @@ function swipeGalleryOnScroll() {
   
   
   // Reference: https://www.trysmudford.com/blog/linear-interpolation-functions/
+
+  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
+  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
+  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
+  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
+  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
+  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
   const clamp = (v, min = 0, max = 1) => Math.min(max, Math.max(min, v));
   const invLerp = (current, target, progress) => clamp((progress - current) / (target - current));
 
