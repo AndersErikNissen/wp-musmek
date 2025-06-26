@@ -36,40 +36,51 @@ mobileMenu();
 function swipeGalleryOnScroll() {
   // Only run if a gallery section is rendered
   const gallery = document.body.querySelector('.section-gallery');
+  
   if (!gallery) return;
+
+  const images = gallery.querySelectorAll(".section-gallery__image-container");
+  const galleryWidth = gallery.getBoundingClientRect().width;
+  const imagesWidth = images[0].getBoundingClientRect().left + images[images.length - 1].getBoundingClientRect().right;
+  
+  if (galleryWidth >= imagesWidth) return;
+
+  const imageWrapper = gallery.querySelector(".section-gallery__wrapper");
 
   // Animation loop
   let ticking = false;
-  let breakTicking = false;
+  let looping = false;
   let cache = 0;
-  let rect = gallery.getBoundingClientRect();
-  
   
   // Reference: https://www.trysmudford.com/blog/linear-interpolation-functions/
+  const clamp = (v, min = 0, max = 100) => Math.min(max, Math.max(min, v));
+  const lerp = (from, to, ease) => from * (1 - ease) + to * ease;
+  
+  const maxTransform = imagesWidth - galleryWidth;
 
-  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
-  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
-  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
-  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
-  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
-  // DET ER NICE, MEN VI MANGLER VORES EASE.... SÅ DET ER TILBAGE TIL ALMINDELIG LERP
-  const clamp = (v, min = 0, max = 1) => Math.min(max, Math.max(min, v));
-  const invLerp = (current, target, progress) => clamp((progress - current) / (target - current));
-
-  function tick() {
-    console.log("⏰ TICK");
-    let y = window.pageYOffset || window.scrollY;
-    const howFar = invLerp(rect.top - window.innerHeight, rect.bottom, y);
-
-    if (howFar !== cache) {
-      cache = howFar;
+  function loop() {
+    const rect = gallery.getBoundingClientRect();
+    const current = 100 - ((rect.bottom - window.innerHeight) / rect.height * 100);
+    const progress = clamp(lerp(cache, current, 0.5));
+    
+    if (cache !== progress) {
+      cache = progress;
+      const transformX = maxTransform / 100 * progress;
+      imageWrapper.style.transform = "translateX(-" + transformX + "px)";
+      window.requestAnimationFrame(loop);
+    } else {
+      looping = false;
     }
   }
 
   window.addEventListener("scroll", () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        tick();
+        if (!looping) {
+          looping = true;
+          loop();
+        }
+
         ticking = false;
       });
 

@@ -3,6 +3,7 @@
   padding: 4rem 0;
   display: grid;
   align-items: center;
+  height: 150vh;
 }
 
 .section-text__btn {
