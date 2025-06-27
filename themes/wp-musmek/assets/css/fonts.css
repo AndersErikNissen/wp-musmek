@@ -53,11 +53,20 @@ body {
 /* TEXT */
 /* TEXT */
 
-.h1 {
-  font-size: 2rem;
+.h1,
+.h2 {
   line-height: 1.15;
   font-weight: 800;
+}
+
+.h1 {
+  font-size: 2rem;
   margin-bottom: 1.5rem;
+}
+
+.h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .p,
@@ -65,9 +74,20 @@ body {
   line-height: 1.45;
 }
 
+.label {
+  font-size: 1rem;
+  line-height: 1.15;
+  font-weight: 300;
+  margin-bottom: 1.25rem;
+}
+
 @media (min-width: 768px) {
   .h1 {
     font-size: 3rem;
+  }
+
+  .h2 {
+    font-size: 2rem;
   }
 
   .p-large {

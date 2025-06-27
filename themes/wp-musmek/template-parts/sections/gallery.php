@@ -5,7 +5,7 @@ if ( $data ) : ?>
 
 <section class="section-gallery section">
   <div class="section-gallery__wrapper">
-    <ul class="section-gallery__images">
+    <ul class="section-gallery__images cols-full">
       <?php foreach ($data as $id) : if ( $id ) : ?>
         <li class="section-gallery__image-container">
           <?= wp_get_attachment_image( $id, 'medium-large', false, array(

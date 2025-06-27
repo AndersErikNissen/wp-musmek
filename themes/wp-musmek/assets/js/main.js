@@ -47,7 +47,7 @@ function swipeGalleryOnScroll() {
   
   // Animation loop
   const images = gallery.querySelector(".section-gallery__images");
-  const heightDivider = 2; // If 2, the swiping starts when the top is at the middle of the viewport
+  const heightDivider = 1.5; // If 2, the swiping starts when the top is at the middle of the viewport
 
   let ticking = false;
   let looping = false;
@@ -62,7 +62,7 @@ function swipeGalleryOnScroll() {
   function loop() {
     const rect = gallery.getBoundingClientRect();
     const current = 100 - ((rect.bottom - (window.innerHeight / heightDivider)) / rect.height * 100);
-    const progress = clamp(lerp(cache, current, 0.5));
+    const progress = clamp(lerp(cache, current, 0.1));
     
     if (cache !== progress) {
       const transformString = "translateX(-" + (maxTransform / 100 * progress) + "px)";
@@ -94,3 +94,7 @@ function swipeGalleryOnScroll() {
   });
 }
 swipeGalleryOnScroll();
+
+window.addEventListener("resize", () => {
+  swipeGalleryOnScroll();
+});

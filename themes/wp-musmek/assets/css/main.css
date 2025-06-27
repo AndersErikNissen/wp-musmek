@@ -3,10 +3,20 @@
   --color-white: #FFFFFF;
   --color-grey: #D2D2D2;
   --color-orange: #F4A436;
+
+  --header-height: 67px;
+  --pw-margin: 0.75rem;
+}
+
+@media (min-height: 768px) {
+  :root {
+    --header-height: 90px;
+    --pw-margin: 1.25rem;
+  }
 }
 
 .section {
-  margin: 4rem 0;
+  margin: 8rem 0;
 }
 
 .menu {
@@ -50,7 +60,7 @@
 .cols-full {
   margin: 0 auto;
   max-width: 100%;
-  padding: 0 0.75rem;
+  padding: 0 var(--pw-margin);
 }
 
 .cols-6 {
@@ -70,7 +80,6 @@
   .cols-10,
   .cols-full {
     max-width: calc(((var(--max-width, 100%) - ((var(--cols, 12) - 1) * 1rem)) / 12 * var(--cols, 12)) + ((var(--cols, 12) - 1) * 1rem));
-    padding: 0 1.25rem;
   }
 }
 

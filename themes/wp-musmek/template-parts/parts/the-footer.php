@@ -4,8 +4,8 @@
   $logo = $options['footer_logo'];
 ?>
 
-<footer class="p-the-footer">
-  <div class="p-the-footer__main cols-10">
+<footer class="p-the-footer cols-full">
+  <div class="p-the-footer__main">
     <div class="p-the-footer__content">
       <?php if ( $logo ) : ?>
         <div class="p-the-footer__logo">
@@ -85,7 +85,7 @@
     </div>
 
   </div>
-  <div class="p-the-footer__bottom cols-10">
+  <div class="p-the-footer__bottom">
     <p>Copyright © <?php echo date( "Y" ); ?> Muskelmekanikeren</p>
   </div>
 </footer>
