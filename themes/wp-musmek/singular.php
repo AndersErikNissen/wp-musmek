@@ -9,6 +9,7 @@
         get_template_part( 'template-parts/sections/text' );
         get_template_part( 'template-parts/sections/gallery' );
         get_template_part( 'template-parts/sections/services' );
+        get_template_part( 'template-parts/sections/reviews' );
       endif;
 
     endwhile;
