@@ -4,11 +4,11 @@
   --color-grey: #D2D2D2;
   --color-orange: #F4A436;
 
-  --header-height: 67px;
+  --header-height: 66px;
   --pw-margin: 0.75rem;
 }
 
-@media (min-height: 768px) {
+@media (min-width: 768px) {
   :root {
     --header-height: 90px;
     --pw-margin: 1.25rem;

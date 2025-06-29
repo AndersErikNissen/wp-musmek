@@ -22,7 +22,7 @@ if ( $data ) : ?>
         <?php 
           foreach ($service_posts as $key => $post) :
             setup_postdata( $post ); ?>
-            <li>
+            <li class="section-services__post">
               <?php if ( $show_numbers ) : ?>
                 <p class="label">0<?= $key + 1; ?></p>
               <?php endif; ?>
