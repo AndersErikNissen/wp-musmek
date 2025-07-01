@@ -12,24 +12,17 @@ foreach ( $review_posts as $index => $post ) {
 if ( $data ) : ?>
 
 <section class="section-reviews section">
-  <div class="section-reviews__content cols-6">
+  <div class="section-reviews__content cols-10">
     <?php if ( $review_posts ) : ?>
       <ul class="section-reviews__reviews">
-        <pre>
-          <?php print_r($filtered_posts[0]); ?> 
-        </pre>
-        <li class="section-reviews__review-column-0">
-          <?php 
-            foreach ($filtered_posts[0] as $post) {
+        <?php for ( $i = 0; $i < 3; $i++ ) : ?>
+          <li class="section-reviews__column-<?= $i; ?>">
+            <?php foreach ( $filtered_posts[$i] as $post ) {
               setup_postdata( $post );
-
               get_template_part( 'template-parts/parts/review' );
-
-              wp_reset_postdata( );
-            };
-          ?>
-        </li>
-        
+            }; ?>
+          </li>
+        <?php endfor; ?>
       </ul>
     <?php wp_reset_postdata();
       endif; ?>
