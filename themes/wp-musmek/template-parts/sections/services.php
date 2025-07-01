@@ -1,9 +1,10 @@
 <?php
 $data = get_section_data( 'section_services_', get_the_ID() );
-$service_posts = $data['services'];
-$show_numbers = get_field( 'show_numbers' );
 
-if ( $data ) : ?>
+if ( $data && !empty( $data['services'] ) ) :
+
+$service_posts = $data['services'];
+$show_numbers = get_field( 'show_numbers' ); ?>
 
 <section class="section-services section">
   <div class="section-services__content cols-10">

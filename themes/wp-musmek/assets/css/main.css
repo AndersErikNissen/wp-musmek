@@ -17,6 +17,10 @@
   }
 }
 
+#content {
+  min-height: 60vh;
+}
+
 .section {
   margin: 8rem 0;
 }
@@ -55,6 +59,12 @@
 .btn:hover,
 .btn--cta:hover {
   border-radius: 1rem;
+}
+
+.btn--read-more {
+  cursor: pointer;
+  font-weight: 700;
+  display: inline-block;
 }
 
 .cols-6,

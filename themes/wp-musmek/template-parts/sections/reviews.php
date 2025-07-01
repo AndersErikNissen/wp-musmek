@@ -1,32 +1,22 @@
 <?php
 $data = get_section_data( 'section_reviews_', get_the_ID() );
 
-if ( $data ) : 
-  
-  
-  $review_posts = $data['reviews'];
-$filtered_posts = array();
-
-foreach ( $review_posts as $index => $post ) {
-  $filtered_posts[$index % 3][] = $post;
-} ?>
+if ( $data && !empty( $data['reviews'] ) ) : 
+$review_posts = $data['reviews']; ?>
 
 <section class="section-reviews section">
+  <?php get_template_part( 'template-parts/parts/section-header', null, array( 'data' => $data, 'heading_class' => 'h2' ) ); ?>
+  
   <div class="section-reviews__content cols-10">
-    <?php if ( $review_posts ) : ?>
-      <ul class="section-reviews__reviews">
-        <?php for ( $i = 0; $i < 3; $i++ ) : ?>
-          <li class="section-reviews__column-<?= $i; ?>">
-            <?php foreach ( $filtered_posts[$i] as $post ) {
-              setup_postdata( $post );
-              get_template_part( 'template-parts/parts/review' );
-            }; ?>
-          </li>
-        <?php endfor; ?>
-      </ul>
-    <?php wp_reset_postdata();
-      endif; ?>
+    <div class="section-reviews__reviews">
+      <?php foreach ( $review_posts as $post ) {
+        setup_postdata( $post );
+        get_template_part( 'template-parts/parts/review' );
+      }; ?>
+    </div>
   <div>
 </section>
 
-<?php endif;
+<?php 
+wp_reset_postdata();
+endif; 

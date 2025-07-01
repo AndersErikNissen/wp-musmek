@@ -10,9 +10,10 @@ include get_theme_file_path( '/assets/php/globals.php' );
 add_action( 'wp_enqueue_scripts', function() {
   wp_enqueue_style( 'reset', get_theme_file_uri( 'assets/css/reset.css' ) );
   wp_enqueue_style( 'main', get_theme_file_uri( 'assets/css/main.css' ) );
-  wp_enqueue_style( 'fonts', get_theme_file_uri( 'assets/css/fonts.css' ) );
+  wp_enqueue_style( 'typography', get_theme_file_uri( 'assets/css/typography.css' ) );
   wp_enqueue_style( 'header', get_theme_file_uri( 'assets/css/header.css' ) );
   wp_enqueue_style( 'sections', get_theme_file_uri( 'assets/css/sections.css' ) );
+  wp_enqueue_style( 'parts', get_theme_file_uri( 'assets/css/parts.css' ) );
   wp_enqueue_style( 'footer', get_theme_file_uri( 'assets/css/footer.css' ) );
   wp_enqueue_style( 'top-priority', get_theme_file_uri( 'assets/css/top-priority.css' ) );
 } );

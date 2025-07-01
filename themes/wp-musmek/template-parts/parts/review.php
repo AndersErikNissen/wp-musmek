@@ -1,3 +1,15 @@
+<?php 
+$the_review = get_field( 'the_review' );
+$truncated_review = false;
+
+if ( $the_review ) {
+  if ( mb_strlen( $the_review ) > 200 ) {
+    $truncated_review = substr( $the_review, 0, 200 ) . '<span class="btn--read-more js-toggle-read-more"> ...Læs mere</span>';
+    $the_review = $the_review . '<span class="btn--read-more js-toggle-read-more"> ...Læs mindre</span>';
+  }
+}
+?>
+
 <div class="p-review">
   <div class="p-review__icon">
     <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -5,13 +17,18 @@
     </svg>
   </div>
   
-  <?php if ( get_field( 'the_review' ) ) : ?>
-    <div class="p-review__review">
-      <p class="p text-center"><?php the_field( 'the_review' ); ?></p>
+  <?php if ( $the_review ) : ?>
+    <div class="p-review__main <?= $truncated_review ? 'js-truncated' : ''; ?>">
+      <p class="p-review__text--full p text-center"><?= $the_review; ?></p>
+      <?php if ( $truncated_review ) : ?>
+        <p class="p-review__text--truncated p text-center"><?= $truncated_review; ?></p>
+      <?php endif; ?>
     </div>
   <?php endif; ?>
   
   <?php if ( get_field( 'name' ) ) : ?>
-    <p class="label text-center"><?php the_field( 'name' ); ?></p>
+    <div class="p-review__name-wrapper">
+      <p class="label text-center"><?php the_field( 'name' ); ?></p>
+    </div>
   <?php endif; ?>
 </div>

@@ -1,7 +1,7 @@
 <?php
 $data = get_section_data( 'section_gallery_', get_the_ID() );
 
-if ( $data ) : ?>
+if ( $data && !empty($data['image_1']) ) : ?>
 
 <section class="section-gallery section">
   <div class="section-gallery__wrapper">

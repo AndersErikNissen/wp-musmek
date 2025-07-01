@@ -35,7 +35,7 @@ mobileMenu();
 
 function swipeGalleryOnScroll() {
   // Only run if a gallery section is rendered
-  const gallery = document.body.querySelector('.section-gallery');
+  const gallery = document.body.querySelector('.section-gallery') || false;
   
   if (!gallery) return;
 
@@ -98,3 +98,17 @@ swipeGalleryOnScroll();
 window.addEventListener("resize", () => {
   swipeGalleryOnScroll();
 });
+
+function handleReadMoreBtns() {
+  const btns = document.querySelectorAll(".js-toggle-read-more");
+  if (btns.length === 0) return;
+
+  btns.forEach((btn) => {
+    const parent = btn.closest('.js-truncated');
+
+    if (!parent) return;
+
+    btn.addEventListener('click', () => parent.classList.toggle("active"));
+  });
+}
+handleReadMoreBtns();

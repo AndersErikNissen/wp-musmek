@@ -54,7 +54,8 @@ body {
 /* TEXT */
 
 .h1,
-.h2 {
+.h2,
+.h3 {
   line-height: 1.15;
   font-weight: 800;
 }
@@ -66,6 +67,11 @@ body {
 
 .h2 {
   font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.h3 {
+  font-size: 1.25rem;
   margin-bottom: 1rem;
 }
 
@@ -88,6 +94,10 @@ body {
 
   .h2 {
     font-size: 2rem;
+  }
+
+  .h3 {
+    font-size: 1.5rem;
   }
 
   .p-large {
