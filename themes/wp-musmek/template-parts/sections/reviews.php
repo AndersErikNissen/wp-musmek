@@ -1,15 +1,15 @@
 <?php
 $data = get_section_data( 'section_reviews_', get_the_ID() );
-$review_posts = $data['reviews'];
 
-
+if ( $data ) : 
+  
+  
+  $review_posts = $data['reviews'];
 $filtered_posts = array();
 
 foreach ( $review_posts as $index => $post ) {
   $filtered_posts[$index % 3][] = $post;
-}
-
-if ( $data ) : ?>
+} ?>
 
 <section class="section-reviews section">
   <div class="section-reviews__content cols-10">
