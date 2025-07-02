@@ -1,9 +1,9 @@
 {
-    "key": "group_68547b429d7ca",
+    "key": "group_68658d78b6dc8",
     "title": "Sektion: Kontakt form",
     "fields": [
         {
-            "key": "field_68547b429f754",
+            "key": "field_68658d78beeb0",
             "label": "Titel",
             "name": "section_contact_form_title",
             "aria-label": "",
@@ -24,7 +24,7 @@
             "append": ""
         },
         {
-            "key": "field_68547b429f75c",
+            "key": "field_6865b4d354a71",
             "label": "Beskrivelse",
             "name": "section_contact_form_description",
             "aria-label": "",
@@ -43,6 +43,27 @@
             "rows": "",
             "placeholder": "",
             "new_lines": ""
+        },
+        {
+            "key": "field_68658d78bf298",
+            "label": "Vis form",
+            "name": "section_contact_form_show_form",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
         }
     ],
     "location": [
@@ -50,12 +71,7 @@
             {
                 "param": "page",
                 "operator": "==",
-                "value": "151"
-            },
-            {
-                "param": "page",
-                "operator": "!=",
-                "value": "34"
+                "value": "76"
             }
         ]
     ],
@@ -68,5 +84,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1750372560
+    "modified": 1751495914
 }

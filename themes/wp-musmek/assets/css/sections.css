@@ -105,8 +105,26 @@
 /* SECTION: REVIEWS */
 /* SECTION: REVIEWS */
 
+.section-reviews {
+  overflow: hidden;
+}
+
 .section-reviews__reviews {
   display: grid;
   gap: var(--pw-margin);
-  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 959px) {
+  .section-reviews__reviews {
+    grid-auto-columns: calc(90% - var(--pw-margin));
+    grid-auto-flow: column;
+    overflow-x: scroll;
+    padding-bottom: var(--pw-margin);
+  }
+}
+
+@media (min-width: 960px) {
+  .section-reviews__reviews {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

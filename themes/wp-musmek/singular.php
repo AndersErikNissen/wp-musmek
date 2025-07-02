@@ -5,11 +5,13 @@
 
     while ( have_posts() ) :
       the_post();
+      
       if ( is_front_page() ) :
         get_template_part( 'template-parts/sections/text' );
         get_template_part( 'template-parts/sections/gallery' );
         get_template_part( 'template-parts/sections/services' );
         get_template_part( 'template-parts/sections/reviews' );
+        get_template_part( 'template-parts/sections/contact-form' );
       endif;
 
     endwhile;
