@@ -112,3 +112,23 @@ function handleReadMoreBtns() {
   });
 }
 handleReadMoreBtns();
+
+// Used with Contact Form 7, to mark if a field has a value
+function markFilledInputs() {
+  const fields = document.querySelectorAll(".wpcf7-form-control");
+
+  if (fields.length === 0) return;
+
+  fields.forEach(field => {
+    const label = field.closest("label").querySelector(".label-text");
+
+    field.addEventListener("change", (e) => {
+      if (e.target.value !== "") {
+        label.classList.add("has-value");
+      } else if (label.classList.contains("has-value")) {
+        label.classList.remove("has-value");
+      }
+    });
+  })
+}
+markFilledInputs();
