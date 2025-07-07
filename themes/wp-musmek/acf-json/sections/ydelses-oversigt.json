@@ -1,11 +1,11 @@
 {
-    "key": "group_68658d78b6dc8",
-    "title": "Sektion: Kontakt form",
+    "key": "group_68698cb241ac8",
+    "title": "Sektion: Ydelses oversigt",
     "fields": [
         {
-            "key": "field_68658d78beeb0",
+            "key": "field_68698cb249bb0",
             "label": "Titel",
-            "name": "section_contact_form_title",
+            "name": "section_services_overview_title",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -24,9 +24,9 @@
             "append": ""
         },
         {
-            "key": "field_6865b4d354a71",
+            "key": "field_68698cb249f98",
             "label": "Beskrivelse",
-            "name": "section_contact_form_description",
+            "name": "section_services_overview_description",
             "aria-label": "",
             "type": "textarea",
             "instructions": "",
@@ -45,9 +45,26 @@
             "new_lines": ""
         },
         {
-            "key": "field_68658d78bf298",
-            "label": "Vis form",
-            "name": "section_contact_form_show_form",
+            "key": "field_68698cb24a380",
+            "label": "Knap",
+            "name": "section_services_overview_button",
+            "aria-label": "",
+            "type": "link",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "allow_in_bindings": 0
+        },
+        {
+            "key": "field_68698cb24a768",
+            "label": "Hvis numre",
+            "name": "show_numbers",
             "aria-label": "",
             "type": "true_false",
             "instructions": "",
@@ -58,12 +75,39 @@
                 "class": "",
                 "id": ""
             },
-            "message": "",
-            "default_value": 1,
+            "message": "Slå til for at vise rækkefølge nummer på hver ydelse.",
+            "default_value": 0,
             "allow_in_bindings": 0,
             "ui": 0,
             "ui_on_text": "",
             "ui_off_text": ""
+        },
+        {
+            "key": "field_68698cb24ab50",
+            "label": "Ydelser",
+            "name": "section_services_overview_services",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "ydelse"
+            ],
+            "post_status": "",
+            "taxonomy": "",
+            "return_format": "object",
+            "multiple": 1,
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "bidirectional": 0,
+            "ui": 1,
+            "bidirectional_target": []
         }
     ],
     "location": [
@@ -84,5 +128,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1751907387
+    "modified": 1751907400
 }

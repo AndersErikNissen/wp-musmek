@@ -48,57 +48,73 @@
 /* SECTION: SERVICES */
 /* SECTION: SERVICES */
 
-.section-services__content {
-  display: grid;
-  align-items: start;
+.section-services__content,
+.section-services-overview__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 0 4rem;
-  grid-template-columns: 1fr;
 }
 
-.section-services__aside {
+.section-services-overview__aside {
+  flex: 0 0 calc(40% - 2rem);
   position: sticky;
   top: var(--header-height, 0);
   background-color: var(--color-white);
-  padding: 1px 0 var(--pw-margin);
   margin-top: -1px;
 }
 
-.section-services__posts {
+.section-services__posts,
+.section-services-overview__posts {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
 }
 
-.section-services__post:nth-child(n + 2) {
+.section-services__post:nth-child(n + 2),
+.section-services-overview__post:nth-child(n + 2) {
   margin-top: 2rem;
   padding-top: 2rem;
   border-top: 1px solid var(--color-grey);
 }
 
 @media (min-width: 768px) {
-  .section-services__content {
-    grid-template-columns: repeat(2, 1fr);
+  .section-services__content,
+  .section-services-overview__content {
+    flex-direction: row;
   }
 
-  .section-services__post:nth-child(n + 2) {
+  .section-services-overview__aside { 
+    flex: 0 0 calc(50% - 2rem);
+  }
+
+  .section-services__post:nth-child(n + 2),
+  .section-services-overview__post:nth-child(n + 2) {
     margin-top: 4rem;
     padding-top: 4rem;
   }
 }
 
 @media (min-width: 960px) {
-  .section-services__content {
-    grid-template-columns: 1fr 2fr;
+  .section-services-overview__aside {
+    flex: 0 0 calc(40% - 2rem);
   }
 }
 
 @media (max-width: 767px) {
-  .section-services__aside {
+  .section-services-overview__aside {
     border-bottom: 1px solid var(--color-grey);
+    padding: calc(0.5rem + 1px) 0 var(--pw-margin);
   }
 
-  .section-services__posts {
+  .section-services__posts,
+  .section-services-overview__posts {
     padding-top: 2rem;
   }
+}
+
+.section-services-overview__post .btn--link {
+  margin-top: 0.75rem;
 }
 
 /* SECTION: REVIEWS */
@@ -127,4 +143,18 @@
   .section-reviews__reviews {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* SECTION: 404 */
+/* SECTION: 404 */
+/* SECTION: 404 */
+
+.section-404__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section-404__content .btn--cta {
+  margin-top: 1rem;
 }

@@ -1,18 +1,30 @@
 <?php
-$data = get_section_data( 'section_services_', get_the_ID() );
+$data = get_section_data( 'section_services_overview_', get_the_ID() );
 
 if ( $data && !empty( $data['services'] ) ) :
 
 $service_posts = $data['services'];
 $show_numbers = get_field( 'show_numbers' ); ?>
 
-<section class="section-services section">
-  <div class="section-services__content cols-10">
+<section class="section-services-overview section">
+  <div class="section-services-overview__content cols-10">
+    <?php if ( !empty( $data['title'] ) || !empty( $data['description'] ) ) : ?>
+      <div class="section-services-overview__aside">
+        <?php if ( !empty( $data['title'] ) ) : ?>
+          <h2 class="h1"><?= $data['title'] ?></h2>
+        <?php endif; ?>
+
+        <?php if ( !empty( $data['description'] ) ) : ?>
+          <p class="p-large"><?= $data['description'] ?></p>
+        <?php endif; ?>
+      </div>
+    <?php endif; ?>
+
     <?php if ( $service_posts ) : ?>
-      <ul class="section-services__posts">
+      <ul class="section-services-overview__posts">
         <?php foreach ($service_posts as $key => $post) :
           setup_postdata( $post ); ?>
-          <li class="section-services__post">
+          <li class="section-services-overview__post">
             <?php if ( $show_numbers ) : ?>
               <p class="label">0<?= $key + 1; ?></p>
             <?php endif; ?>
