@@ -4,7 +4,6 @@ $data = get_section_data( 'section_services_', get_the_ID() );
 if ( $data && !empty( $data['services'] ) ) :
 
 $service_posts = $data['services'];
-$show_numbers = get_field( 'show_numbers' ); 
 
 if ( $service_posts ) : ?>
 
@@ -14,20 +13,12 @@ if ( $service_posts ) : ?>
       <?php foreach ($service_posts as $key => $post) :
         setup_postdata( $post ); ?>
         <li class="section-services__post">
-          <?php if ( $show_numbers ) : ?>
-            <p class="label">0<?= $key + 1; ?></p>
-          <?php endif; ?>
-
           <?php if ( get_field( 'title' ) ) : ?>
             <h3 class="h2"><?php the_field( 'title' ); ?></h3>
           <?php endif; ?>
 
-          <?php if ( get_field( 'short_description' ) ) : ?>
-            <p class="p"><?php the_field( 'short_description' ); ?></p>
-          <?php endif; ?>
-
-          <?php if ( get_field( 'read_more_link' ) ) : ?>
-            <a class="btn--link" href="<?php the_field( 'read_more_link' ); ?>">Læs mere</a>
+          <?php if ( get_field( 'full_description' ) ) : ?>
+            <div class="p-large rte"><?php the_field( 'full_description' ); ?></div>
           <?php endif; ?>
         </li>
       <?php endforeach; wp_reset_postdata(); ?>

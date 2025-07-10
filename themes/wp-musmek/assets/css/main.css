@@ -119,6 +119,44 @@ body {
   }
 }
 
+.rte ol {
+  margin: 1.5rem 0;
+  counter-reset: listCounter;
+  list-style: auto;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.rte ol li {
+  position: relative;
+  counter-increment: listCounter;
+  padding: 1rem 0 1rem 2rem;
+}
+
+.rte ol li::before,
+.rte ol li:last-child::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: calc(100% + 1.5rem);
+  height: 1px;
+  right: 0;
+  background-color: var(--color-grey);
+}
+
+.rte ol li::before {
+  top: 0;
+}
+
+.rte ol li:last-child::after {
+  bottom: 0;
+}
+
+.rte ol li::marker {
+  content: counter(listCounter, decimal-leading-zero);
+  font-weight: 300;
+}
 
 /* CONTACT FORM 7 */
 /* CONTACT FORM 7 */
