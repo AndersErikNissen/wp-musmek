@@ -1319,3 +1319,5 @@ Stack trace:
 [07-Jul-2025 17:00:46 UTC] PHP Warning:  Attempt to read property "title" on null in /var/www/html/wp-includes/class-wp-customize-widgets.php on line 926
 [07-Jul-2025 17:01:57 UTC] PHP Warning:  Attempt to read property "title" on null in /var/www/html/wp-includes/class-wp-customize-widgets.php on line 926
 [08-Jul-2025 18:05:35 UTC] PHP Warning:  Undefined array key "title" in /var/www/html/wp-content/themes/wp-musmek/assets/php/acf.php on line 31
+[11-Jul-2025 19:41:57 UTC] PHP Warning:  Undefined variable $has_content in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/faq.php on line 4
+[11-Jul-2025 19:42:08 UTC] PHP Warning:  Array to string conversion in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/faq.php on line 14

@@ -95,10 +95,6 @@ function swipeGalleryOnScroll() {
 }
 swipeGalleryOnScroll();
 
-window.addEventListener("resize", () => {
-  swipeGalleryOnScroll();
-});
-
 function handleReadMoreBtns() {
   const btns = document.querySelectorAll(".js-toggle-read-more");
   if (btns.length === 0) return;
@@ -132,3 +128,24 @@ function markFilledInputs() {
   })
 }
 markFilledInputs();
+
+function handleFaqQuestions() {
+  const questions = document.querySelectorAll(".js-faq-question");
+
+  if (questions.length === 0) return;
+
+  questions.forEach((question) => {
+    const trigger = question.querySelector(".js-faq-question-trigger");
+
+    if (trigger) {
+      trigger.addEventListener("click", () => {
+        question.classList.toggle("active");
+      });
+    }
+  });
+}
+handleFaqQuestions();
+
+window.addEventListener("resize", () => {
+  swipeGalleryOnScroll();
+});

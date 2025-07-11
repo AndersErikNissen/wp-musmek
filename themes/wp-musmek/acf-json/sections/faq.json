@@ -1,0 +1,1056 @@
+{
+    "key": "group_68715228631f0",
+    "title": "Sektion: FAQ",
+    "fields": [
+        {
+            "key": "field_687163d78c4bd",
+            "label": "Titel",
+            "name": "section_faq_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68716a56511b6",
+            "label": "Spørgsmål",
+            "name": "section_faq_questions",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "row",
+            "sub_fields": [
+                {
+                    "key": "field_68715228e6c9f",
+                    "label": "(1)",
+                    "name": "1",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_68715253e6ca0",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_6871527be6ca1",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_68715290e6ca2",
+                    "label": "(2)",
+                    "name": "2",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68715253e6ca0",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871527be6ca1",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_68715290e6ca3",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_68715290e6ca4",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_687152a8e6ca6",
+                    "label": "(3)",
+                    "name": "3",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68715253e6ca0",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871527be6ca1",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca3",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca4",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_687152a8e6ca7",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_687152a8e6ca8",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_687152b8e6cab",
+                    "label": "(4)",
+                    "name": "4",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68715253e6ca0",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871527be6ca1",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca3",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca4",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca7",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca8",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_687152b8e6cac",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_687152b8e6cad",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_687152c8b2a8d",
+                    "label": "(5)",
+                    "name": "5",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68715253e6ca0",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871527be6ca1",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca3",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca4",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca7",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca8",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cac",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cad",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_687152c8b2a8e",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_687152c8b2a8f",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_687152d4b2a92",
+                    "label": "(6)",
+                    "name": "6",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68715253e6ca0",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871527be6ca1",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca3",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca4",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca7",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca8",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cac",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cad",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8e",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8f",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_687152d4b2a93",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_687152d4b2a94",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_6871543adcd7c",
+                    "label": "(7)",
+                    "name": "7",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68715253e6ca0",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871527be6ca1",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca3",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca4",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca7",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca8",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cac",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cad",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8e",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8f",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152d4b2a93",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152d4b2a94",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_6871543adcd7d",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_6871543adcd7e",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_68715446dcd81",
+                    "label": "(8)",
+                    "name": "8",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68715253e6ca0",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871527be6ca1",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca3",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca4",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca7",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca8",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cac",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cad",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8e",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8f",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152d4b2a93",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152d4b2a94",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871543adcd7d",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871543adcd7e",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_68715446dcd82",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_68715446dcd83",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_68715457cfa67",
+                    "label": "(9)",
+                    "name": "9",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68715253e6ca0",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871527be6ca1",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca3",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca4",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca7",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca8",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cac",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cad",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8e",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8f",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152d4b2a93",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152d4b2a94",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871543adcd7d",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871543adcd7e",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715446dcd82",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715446dcd83",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_68715457cfa68",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_68715457cfa69",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_68715463cfa6c",
+                    "label": "(10)",
+                    "name": "10",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68715253e6ca0",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871527be6ca1",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca3",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715290e6ca4",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca7",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152a8e6ca8",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cac",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152b8e6cad",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8e",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152c8b2a8f",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152d4b2a93",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_687152d4b2a94",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871543adcd7d",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_6871543adcd7e",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715446dcd82",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715446dcd83",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715457cfa68",
+                                "operator": "!=empty"
+                            },
+                            {
+                                "field": "field_68715457cfa69",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_68715463cfa6d",
+                            "label": "Spørgsmål",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_68715463cfa6e",
+                            "label": "Svar",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            },
+            {
+                "param": "page_type",
+                "operator": "!=",
+                "value": "front_page"
+            }
+        ]
+    ],
+    "menu_order": 99,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1752275190
+}

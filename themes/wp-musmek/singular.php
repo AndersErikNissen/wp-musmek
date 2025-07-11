@@ -16,6 +16,7 @@
         get_template_part( 'template-parts/sections/text' );
         get_template_part( 'template-parts/sections/image' );
         get_template_part( 'template-parts/sections/services' );
+        get_template_part( 'template-parts/sections/faq' );
       }
     endwhile;
 

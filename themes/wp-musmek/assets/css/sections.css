@@ -158,3 +158,49 @@
 .section-404__content .btn--cta {
   margin-top: 1rem;
 }
+
+/* SECTION: FAQ */
+/* SECTION: FAQ */
+/* SECTION: FAQ */
+
+.section-faq {
+  background-color: var(--color-orange--light);
+  padding: 6rem 0;
+}
+
+.section-faq__question {
+  border-bottom: 1px solid var(--color-grey);
+}
+
+.section-faq__question-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.5rem 0;
+}
+
+.section-faq__question.active .section-faq__question-header {
+  padding-bottom: 1rem;
+}
+
+.section-faq__question-header svg {
+  display: block;
+  width: 0.85rem;
+  height: 0.85rem;
+  transform-origin: center;
+}
+
+.section-faq__question.active .section-faq__question-header svg {
+  transform: rotate(45deg);
+}
+
+.section-faq__question.active .section-faq__question-content {
+  padding-bottom: 1.5rem;
+}
+
+.section-faq__question:not(.active) .section-faq__question-content {
+  height: 0;
+  overflow: hidden;
+}
