@@ -31,7 +31,7 @@
           <?php 
             foreach ( $options["addresses"] as $address ) { 
               if ( $address["street_and_nr"] ) {
-                echo '<ul class="p-the-footer__list">';
+                echo '<ul class="p-the-footer__list p-the-footer__addresses">';
                   echo "<li>" . $address["street_and_nr"] . "</li>";
                   if ( $address["citycode_and_city"] ) {
                     echo "<li>" . $address["citycode_and_city"] . "</li>";

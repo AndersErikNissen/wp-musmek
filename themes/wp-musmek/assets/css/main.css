@@ -85,7 +85,43 @@ body {
   text-underline-offset: 0.25rem;
 }
 
+.ratio-container {
+  position: relative;
+}
+
+.ratio-container::before {
+  content: "";
+  display: block;
+  height: 0;
+  width: 100%;
+  padding-top: var(--ratio, 100%);
+}
+
+.ratio-container img {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.ratio--square {
+  --ratio: 100%;
+}
+
+.ratio--portrait {
+  --ratio: calc(5 / 4 * 100%);
+}
+
+.ratio--landscape {
+  --ratio: calc(9 / 16 * 100%);
+}
+
 .cols-6,
+.cols-8,
 .cols-10,
 .cols-full {
   margin: 0 auto;
@@ -95,6 +131,10 @@ body {
 
 .cols-6 {
   --cols: 6;
+}
+
+.cols-8 {
+  --cols: 8;
 }
 
 .cols-10 {
@@ -107,6 +147,7 @@ body {
 
 @media (min-width: 768px) {
   .cols-6,
+  .cols-8,
   .cols-10,
   .cols-full {
     max-width: calc(((var(--max-width, 100%) - ((var(--cols, 12) - 1) * 1rem)) / 12 * var(--cols, 12)) + ((var(--cols, 12) - 1) * 1rem));
@@ -156,6 +197,38 @@ body {
 .rte ol li::marker {
   content: counter(listCounter, decimal-leading-zero);
   font-weight: 300;
+}
+
+
+.p-the-header__menu .menu-item,
+.p-the-footer__list li {
+  padding-bottom: 0.3rem;
+}
+
+.p-the-header__menu .menu-item,
+.p-the-footer__list:not(.p-the-footer__addresses) li {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.p-the-header__menu .menu-item::before,
+.p-the-footer__list:not(.p-the-footer__addresses) li::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -100%;
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transition: transform 300ms ease-in;
+  opacity: 0.8;
+}
+
+.p-the-header__menu .menu-item:hover::before,
+.p-the-footer__list:not(.p-the-footer__addresses) li:hover::before {
+  transform: translateX(100%);
 }
 
 /* CONTACT FORM 7 */

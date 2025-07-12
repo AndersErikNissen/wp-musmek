@@ -43,9 +43,9 @@
                 "id": ""
             },
             "choices": {
-                "fuld": "Fuld",
+                "full": "Fuld",
                 "normal": "Normal",
-                "smal": "Smal"
+                "narrow": "Smal"
             },
             "default_value": "",
             "return_format": "value",
@@ -70,10 +70,10 @@
                 "id": ""
             },
             "choices": {
-                "naturlig": "Naturlig",
-                "firkant": "Firkant",
-                "portraet": "Portræt",
-                "landskap": "Landskap"
+                "natural": "Naturlig",
+                "square": "Firkant",
+                "portrait": "Portræt",
+                "landscape": "Landskap"
             },
             "default_value": "",
             "return_format": "value",
@@ -107,5 +107,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1751907363
+    "modified": 1752351686
 }
