@@ -1,8 +1,8 @@
 <?php 
   $options = get_option_fields();
 
-  $logo = $options['header_logo'];
-?>
+  $logo = $options['header_logo']; ?>
+
 <header class="p-the-header">
   <nav class="p-the-header__content cols-full">
     <?php if ( $logo ) : ?>

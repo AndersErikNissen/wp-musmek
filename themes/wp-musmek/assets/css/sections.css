@@ -30,7 +30,6 @@
 .section-gallery__image-container img {
   width: 100%;
   height: auto;
-  border-radius: 0.75rem;
 }
 
 @media (min-width: 960px) {

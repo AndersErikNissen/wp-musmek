@@ -12,6 +12,7 @@
         get_template_part( 'template-parts/sections/services-overview' );
         get_template_part( 'template-parts/sections/reviews' );
         get_template_part( 'template-parts/sections/contact-form' );
+        
       } elseif ( is_page() && !is_404() ) {
         get_template_part( 'template-parts/sections/text' );
         get_template_part( 'template-parts/sections/image' );

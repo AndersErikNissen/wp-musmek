@@ -8,7 +8,7 @@ if ( $data && !empty($data['image_1']) ) : ?>
     <ul class="section-gallery__images cols-full">
       <?php foreach ($data as $id) : if ( $id ) : ?>
         <li class="section-gallery__image-container">
-          <?= wp_get_attachment_image( $id, 'medium-large', false, array(
+          <?= wp_get_attachment_image( $id, 'larger', false, array(
             'sizes' => '(min-width: 960px) 33.33vw, 66.66vw',
           ) ); ?>
         </li>

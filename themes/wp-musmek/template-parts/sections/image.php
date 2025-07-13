@@ -29,7 +29,7 @@ switch ( $data['image_width'] ) {
 <section class="section-image section">
   <div class="<?= $width_class; ?>">
     <div class="ratio-container ratio--<?= $image_format; ?>" <?= $style; ?>>
-      <?= wp_get_attachment_image( $id, 'medium-large', false, array(
+      <?= wp_get_attachment_image( $id, 'larger', false, array(
         'sizes' => '(min-width: 1920px) 1920px, ' . $image_sizes . '100vw',
       ) ); ?>
     </div>

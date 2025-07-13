@@ -1322,3 +1322,11 @@ Stack trace:
 [11-Jul-2025 19:41:57 UTC] PHP Warning:  Undefined variable $has_content in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/faq.php on line 4
 [11-Jul-2025 19:42:08 UTC] PHP Warning:  Array to string conversion in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/faq.php on line 14
 [12-Jul-2025 19:54:02 UTC] PHP Warning:  Undefined array key "id" in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/image.php on line 24
+[12-Jul-2025 23:13:27 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method WP_Post::the_title() in /var/www/html/wp-content/themes/wp-musmek/index.php:7
+Stack trace:
+#0 /var/www/html/wp-includes/template-loader.php(106): include()
+#1 /var/www/html/wp-blog-header.php(19): require_once('/var/www/html/w...')
+#2 /var/www/html/index.php(17): require('/var/www/html/w...')
+#3 {main}
+  thrown in /var/www/html/wp-content/themes/wp-musmek/index.php on line 7
+[13-Jul-2025 00:11:20 UTC] PHP Warning:  Trying to access array offset on false in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/posts.php on line 7

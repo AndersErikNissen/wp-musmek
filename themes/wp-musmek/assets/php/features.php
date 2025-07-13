@@ -14,57 +14,56 @@ add_action( 'after_setup_theme', function() {
   );
 
   add_theme_support( 'title-tag' );
-  add_theme_support( 'post-thumbnails' ); 
 
   // Custom images sizes
   add_image_size( 'small-medium', 768);
-  add_image_size( 'medium-large', 1920);
+  add_image_size( 'larger', 1920);
 } );
 
-add_action('admin_init', function() {
-  // Remove editor from Pages
-  remove_post_type_support('page', 'editor');
-  remove_post_type_support('post', 'editor');
-});
+add_action( 'admin_init', function() {
+  // Remove editor from Pages / Posts
+  remove_post_type_support( 'page', 'editor' );
+  remove_post_type_support( 'post', 'editor' );
+} );
 
 // Reference: https://help.one.com/hc/en-us/articles/20278284092433-How-can-I-disable-comments-in-WordPress
-add_action('admin_init', function () {
+add_action( 'admin_init', function () {
   // Redirect any user trying to access comments page
   global $pagenow;
     
-  if ($pagenow === 'edit-comments.php') {
+  if ( $pagenow === 'edit-comments.php' ) {
     wp_safe_redirect(admin_url());
     exit;
   }
 
   // Remove comments metabox from dashboard
-  remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
+  remove_meta_box( 'dashboard_recent_comments', 'dashboard', 'normal' );
 
   // Disable support for comments and trackbacks in post types
-  foreach (get_post_types() as $post_type) {
+  foreach ( get_post_types() as $post_type) {
     if (post_type_supports($post_type, 'comments')) {
       remove_post_type_support($post_type, 'comments');
       remove_post_type_support($post_type, 'trackbacks');
     }
   }
-});
+} );
 
 // Close comments on the front-end
-add_filter('comments_open', '__return_false', 20, 2);
-add_filter('pings_open', '__return_false', 20, 2);
+add_filter( 'comments_open', '__return_false', 20, 2 );
+add_filter( 'pings_open', '__return_false', 20, 2 );
  
 // Hide existing comments
-add_filter('comments_array', '__return_empty_array', 10, 2);
+add_filter( 'comments_array', '__return_empty_array', 10, 2 );
  
 // Remove comments page in menu
-add_action('admin_menu', function () {
+add_action( 'admin_menu', function () {
   remove_menu_page('edit-comments.php');
-});
+} );
  
 // Remove comments links from admin bar
-add_action('init', function () {
-  if (is_admin_bar_showing()) {
+add_action( 'init', function () {
+  if ( is_admin_bar_showing() ) {
       remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
   }
-});
+} );
 
