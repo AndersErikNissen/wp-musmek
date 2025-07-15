@@ -63,7 +63,19 @@ add_action( 'admin_menu', function () {
 // Remove comments links from admin bar
 add_action( 'init', function () {
   if ( is_admin_bar_showing() ) {
-      remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
+    remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
   }
 } );
 
+// Rewrite the URL base for pagination
+add_action('init', function() {
+  global $wp_rewrite;
+  $wp_rewrite->pagination_base = 'side';
+}, 1);
+
+// Noindex the Options page (just in case, that the redirect doesn't stop it)
+add_action( 'wp_head', function() {
+  if ( is_page( 'indstillinger' ) || is_page( 'options' ) ) : ?>
+    <meta name="robots" content="noindex, nofollow" />
+  <? endif;
+} );
