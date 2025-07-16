@@ -24,27 +24,6 @@
             "append": ""
         },
         {
-            "key": "field_68780ad4611a2",
-            "label": "Beskrivelse",
-            "name": "section_cards_description",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "rows": "",
-            "placeholder": "",
-            "new_lines": ""
-        },
-        {
             "key": "field_68780ae4611a3",
             "label": "Kort",
             "name": "section_cards_cards",
@@ -359,5 +338,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1752705283
+    "modified": 1752708399
 }
