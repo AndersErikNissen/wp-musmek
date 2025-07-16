@@ -26,7 +26,15 @@ img {
   border-radius: 0.75rem;
 }
 
-#content {
+.header-hidden {
+  transform: translateY(-101%);
+}
+
+#Header {
+  transition: transform 200ms ease-in;
+}
+
+#Content {
   min-height: 60vh;
 }
 
@@ -131,6 +139,10 @@ img {
 
 .ratio--landscape {
   --ratio: calc(9 / 16 * 100%);
+}
+
+.ratio--banner {
+  --ratio: calc(1.5 / 4 * 100%);
 }
 
 /* COLS */
@@ -264,20 +276,21 @@ img {
 /* MENU LINKS */
 /* MENU LINKS */
 
-.p-the-header__menu .menu-item,
-.p-the-footer__list li {
+.p-the-header__menu .menu-item a,
+.p-the-footer__list li a {
   padding-bottom: 0.3rem;
+  margin-bottom: -0.3rem;
 }
 
-.p-the-header__menu .menu-item,
-.p-the-footer__list:not(.p-the-footer__addresses) li {
+.p-the-header__menu .menu-item a,
+.p-the-footer__list:not(.p-the-footer__addresses) li a {
   position: relative;
   display: inline-block;
   overflow: hidden;
 }
 
-.p-the-header__menu .menu-item::before,
-.p-the-footer__list:not(.p-the-footer__addresses) li::before {
+.p-the-header__menu .menu-item a::before,
+.p-the-footer__list:not(.p-the-footer__addresses) li a::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -290,8 +303,8 @@ img {
   opacity: 0.8;
 }
 
-.p-the-header__menu .menu-item:hover::before,
-.p-the-footer__list:not(.p-the-footer__addresses) li:hover::before {
+.p-the-header__menu .menu-item a:hover::before,
+.p-the-footer__list:not(.p-the-footer__addresses) li a:hover::before {
   transform: translateX(100%);
 }
 

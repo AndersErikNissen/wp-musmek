@@ -3,7 +3,7 @@
 
   $logo = $options['header_logo']; ?>
 
-<header class="p-the-header">
+<header id="Header" class="p-the-header">
   <nav class="p-the-header__content cols-full">
     <?php if ( $logo ) : ?>
       <div class="p-the-header__logo-wrapper">

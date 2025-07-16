@@ -116,13 +116,17 @@ function markFilledInputs() {
   if (fields.length === 0) return;
 
   fields.forEach(field => {
-    const label = field.closest("label").querySelector(".label-text");
+    const label = field.closest("label");
+
+    if (!label) return;
+
+    const text = label.querySelector(".label-text");
 
     field.addEventListener("change", (e) => {
       if (e.target.value !== "") {
-        label.classList.add("has-value");
-      } else if (label.classList.contains("has-value")) {
-        label.classList.remove("has-value");
+        text.classList.add("has-value");
+      } else if (text.classList.contains("has-value")) {
+        text.classList.remove("has-value");
       }
     });
   })
@@ -146,6 +150,46 @@ function handleFaqQuestions() {
 }
 handleFaqQuestions();
 
+function handleHeaderVisibility() {
+  const header = document.querySelector("#Header");
+  const headerHeight = header.getBoundingClientRect().height;
+
+  let isShowing = true;
+  let lastScrollY = 0;
+
+  function toggleVisibility(scrollY) {
+    const isScrollingDown = scrollY > lastScrollY;
+    let hide = isScrollingDown;
+    
+    if (hide && headerHeight + /* some buffer -> */ 200 > scrollY) hide = false;
+
+    if (hide === isShowing) {
+      isShowing = !isShowing;
+      header.classList.toggle('header-hidden');
+    }
+
+    lastScrollY = scrollY;
+  }
+
+  let ticking = false;
+
+  function debounce() {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        toggleVisibility(window.scrollY);
+        ticking = false;
+      });
+
+      ticking = true;
+    }
+  }
+
+  window.addEventListener("scroll", debounce);
+}
+
+handleHeaderVisibility();
+
 window.addEventListener("resize", () => {
   swipeGalleryOnScroll();
+  handleHeaderVisibility();
 });

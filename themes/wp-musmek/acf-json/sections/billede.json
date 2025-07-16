@@ -87,11 +87,6 @@
     "location": [
         [
             {
-                "param": "page_type",
-                "operator": "!=",
-                "value": "front_page"
-            },
-            {
                 "param": "post_type",
                 "operator": "==",
                 "value": "page"
@@ -107,5 +102,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1752351686
+    "modified": 1752619335
 }
