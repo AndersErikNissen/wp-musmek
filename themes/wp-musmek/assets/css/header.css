@@ -138,6 +138,10 @@ body.transition-mobile-menu .menu-btn-icon > .bottom {
   transform: translateY(1rem);
 }
 
+body.active-mobile-menu {
+  overflow: hidden;
+}
+
 body:not(.active-mobile-menu) .mobile-menu {
   display: none;
 }
@@ -149,7 +153,7 @@ body:not(.active-mobile-menu) .mobile-menu {
   width: 100%;
   height: calc(100% - 66px);
   overflow: hidden;
-  z-index: 1;
+  z-index: 10;
 }
 
 body.transition-mobile-menu .mobile-menu {

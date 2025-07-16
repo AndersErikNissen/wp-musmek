@@ -1,11 +1,32 @@
 :root {
+  /* NEUTRAL COLORS */
+  /* NEUTRAL COLORS */
+  /* NEUTRAL COLORS */
+
   --color-black: #111111;
   --color-grey--dark: #434343;
   --color-white: #FFFFFF;
   --color-grey: #D2D2D2;
-  --color-orange: #F4A436;
-  --color-orange--lighter: #f7dbb4;
-  --color-orange--light: #faf7f3;
+
+  /* MAIN COLORs */
+  /* MAIN COLORs */
+  /* MAIN COLORs */
+
+  --color-orange--950: #431205;
+  --color-orange--900: #742813;
+  --color-orange--800: #8d3013;
+  --color-orange--700: #ae3d0f;
+  --color-orange--600: #d25a0d;
+  --color-orange--500: #ed7d13;
+  --color-orange--400: #F4A436;
+  --color-orange--300: #f6b953;
+  --color-orange--200: #f9d58e;
+  --color-orange--100: #fcebc9;
+  --color-orange--50: #fef8ec;
+
+  /* SIZING */
+  /* SIZING */
+  /* SIZING */
 
   --header-height: 66px;
   --pw-margin: 0.75rem;
@@ -65,16 +86,17 @@ img {
   padding: 1rem 1.8rem;
   border-radius: 0.25rem;
   transition: border-radius 300ms ease-in, background-color 300ms ease-in;
-  color: var(--color-black);
 }
 
 .btn {
+  color: var(--color-black);
   border: 1px solid var(--color-black);
 }
 
 .btn--cta {
-  border: 1px solid var(--color-orange);
-  background-color: var(--color-orange);
+  color: var(--color-orange--950);
+  border: 1px solid var(--color-orange--400);
+  background-color: var(--color-orange--400);
 }
 
 .btn:hover,
@@ -107,7 +129,7 @@ img {
 
 .ratio-container {
   position: relative;
-  background-color: var(--color-orange--light);
+  background-color: var(--color-orange--50);
   border-radius: 0.75rem;
 }
 
@@ -239,7 +261,8 @@ img {
   width: calc(100% + 1.5rem);
   height: 1px;
   right: 0;
-  background-color: var(--color-grey);
+  background-color: currentColor;
+  opacity: 0.2;
 }
 
 .rte ul li::before,
@@ -263,7 +286,7 @@ img {
 .rte blockquote {
   display: inline-block;
   padding: 1.25rem 1.5rem;
-  background-color: var(--color-orange--lighter);
+  background-color: var(--color-orange--200);
   border-radius: 0.75rem;
   font-style: italic;
 }
@@ -347,7 +370,12 @@ input.wpcf7-form-control {
 
 .wpcf7-not-valid-tip {
   margin-top: 0.25rem;
-  color: var(--color-orange);
+  color: var(--color-orange--400);
+}
+
+.wpcf7-form input:focus-visible,
+.wpcf7-form textarea:focus-visible {
+  outline-color: var(--color-orange--400);
 }
 
 input:not([type="submit"]).wpcf7-form-control,

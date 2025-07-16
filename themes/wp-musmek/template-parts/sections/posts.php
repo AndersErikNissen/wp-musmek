@@ -11,6 +11,7 @@ $has_pagination = function_exists( 'get_next_posts_link' ) === true || function_
               'sizes' => '(min-width: 1920px) 960px, (min-width: 768px) 50vw, 100vw',
             ) );
           }; ?>
+          <a class="cover" href="<?php the_permalink(); ?>"></a>
         </div>
 
         <div class="section-posts__post-content">
