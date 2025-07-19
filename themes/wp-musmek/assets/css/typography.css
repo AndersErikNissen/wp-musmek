@@ -63,25 +63,58 @@ body {
 /* TEXT */
 
 .h1,
+.rte h1,
 .h2,
-.h3 {
+.rte h2,
+.h3,
+.rte h3,
+.rte h4,
+.rte h5,
+.rte h6 {
   line-height: 1.15;
   font-weight: 800;
 }
 
-.h1 {
+.h1,
+.rte h1 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
 }
 
-.h2 {
+.rte h1 {
+  margin: 1.5rem 0;
+}
+
+.h2,
+.rte h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.h3 {
+.h3,
+.rte h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
+}
+
+.rte h2,
+.rte h3 {
+  margin: 1rem 0;
+}
+
+.rte h4 {
+  font-size: 1rem;
+  margin: 0.75rem 0;
+}
+
+.rte h5 {
+  font-size: 0.8rem;
+  margin: 0.75rem 0;
+}
+
+.rte h6 {
+  font-size: 0.6rem;
+  margin: 0.75rem 0;
 }
 
 .p,
@@ -97,16 +130,31 @@ body {
 }
 
 @media (min-width: 768px) {
-  .h1 {
+  .h1,
+  .rte h1 {
     font-size: 3rem;
   }
 
-  .h2 {
+  .h2,
+  .rte h2 {
     font-size: 2rem;
   }
 
-  .h3 {
+  .h3,
+  .rte h3 {
     font-size: 1.5rem;
+  }
+
+  .rte h4 {
+    font-size: 1.25rem;
+  }
+
+  .rte h5 {
+    font-size: 1rem;
+  }
+
+  .rte h6 {
+    font-size: 0.75rem;
   }
 
   .p-large {
@@ -120,4 +168,93 @@ body {
 
 .text-center {
   text-align: center;
+}
+
+
+/* RTE */
+/* RTE */
+/* RTE */
+
+.rte > * {
+  display: block;
+}
+
+.rte img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.rte ul,
+.rte ol,
+.rte blockquote,
+.rte img {
+  margin: 1.5rem 0;
+}
+
+.rte ul,
+.rte ol {
+  display: flex;
+  flex-direction: column;
+}
+
+.rte ol {
+  padding-left: 1.5rem;
+  list-style: auto;
+  counter-reset: listCounter;
+}
+
+.rte li {
+  position: relative;
+}
+
+.rte ul li {
+  padding: 1.5rem 0;
+}
+
+.rte ol li {
+  padding: 1.5rem 0 1.5rem 2rem;
+  counter-increment: listCounter;
+}
+
+.rte li::before,
+.rte li:last-child::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: calc(100% + 1.5rem);
+  height: 1px;
+  right: 0;
+  background-color: currentColor;
+  opacity: 0.2;
+}
+
+.rte ul li::before,
+.rte ul li:last-child::after {
+  width: 100%;
+}
+
+.rte li::before {
+  top: 0;
+}
+
+.rte li:last-child::after {
+  bottom: 0;
+}
+
+.rte ol li::marker {
+  content: counter(listCounter, decimal-leading-zero);
+  font-weight: 300;
+}
+
+.rte blockquote {
+  padding: 1.25rem 1.5rem;
+  background-color: var(--color-orange--100);
+  border-radius: 0.75rem;
+  font-style: italic;
+  color: var(--color-orange--800);
+}
+
+.rte strong {
+  font-weight: 800;
 }

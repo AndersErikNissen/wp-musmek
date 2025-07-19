@@ -546,7 +546,7 @@
             "allow_in_bindings": 0,
             "rows": "",
             "placeholder": "",
-            "new_lines": ""
+            "new_lines": "br"
         }
     ],
     "location": [
@@ -567,5 +567,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1751393173
+    "modified": 1752870392
 }

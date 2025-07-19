@@ -6,7 +6,9 @@ if ( in_array( 'contact-form-7/wp-contact-form-7.php', apply_filters( 'active_pl
   $plugin_is_active = true;
 }
 
-if ( $data && $plugin_is_active ) : ?>
+$has_shortcode = !empty( $data['form_shortcode'] );
+
+if ( $data && $plugin_is_active && $has_shortcode ) : ?>
 
 <section class="section-contact-form section">
 <?php
@@ -14,7 +16,7 @@ if ( $data && $plugin_is_active ) : ?>
 
   if ( $data['show_form'] ) : ?>
     <div class="cols-6">
-      <?= apply_shortcodes( '[contact-form-7 id="1234" title="Contact form 1"]' ); ?>
+      <?= apply_shortcodes( $data['form_shortcode'] ); ?>
     </div>
   <?php endif; ?>
 </section>

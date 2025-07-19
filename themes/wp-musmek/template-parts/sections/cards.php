@@ -7,18 +7,20 @@ $cards = array_filter( $data['cards'], function( $value ) {
   return !empty( $value['title'] );
 } ); 
 
-$columns = count( $cards );
-if ( $columns > 3 ) $columns = 2;
+$card_columns = count( $cards );
+$layout_columns = 10;
+if ( $card_columns < 3 ) $layout_columns = 8;
+if ( $card_columns > 3 ) $card_columns = 2;
 
 if ( count( $cards ) > 0 ) : ?>
 
 <section class="section-cards section">
-  <div class="cols-10">
+  <div class="cols-<?= $layout_columns; ?>">
     <?php if ( !empty( $data['title'] ) ) : ?>
       <h2 class="h2 text-center"><?= $data['title']; ?></h2>
     <?php endif; ?>
 
-    <ul class="section-cards__cards" style="--columns:<?= $columns; ?>">
+    <ul class="section-cards__cards" style="--columns:<?= $card_columns; ?>">
       <?php foreach ( $cards as $card ) : ?>
         <li class="section-cards__card">
           <h3 class="h3"><?= $card['title']; ?></h3>

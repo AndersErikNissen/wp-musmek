@@ -9,7 +9,7 @@ $random_posts = new WP_Query( array(
 
 <section class="section-post section">
   <?php if ( !empty( $data['title'] ) ) : ?>
-    <h1 class="h1 text-center cols-6"><?= $data['title']; ?></h1>
+    <h1 class="h1 text-center cols-8"><?= $data['title']; ?></h1>
   <?php endif; ?>
 
   <?php if ( !empty( $data['image'] ) ) : ?>
@@ -31,7 +31,10 @@ $random_posts = new WP_Query( array(
     <ul class="section-post__random-posts-content">
       <?php foreach ( $random_posts->posts as $random_post ) : 
         setup_postdata( $random_post ); 
-        $post_data = get_section_data( '', $random_post->ID ); ?>
+        $post_data = get_section_data( '', $random_post->ID ); 
+        $description = $post_data['short_description']; 
+        $has_description = !empty( $description );
+        if ( $has_description && strlen( $description ) >  90 ) $description = substr( $description, 0, 90 ) . '...'; ?>
 
         <li class="section-post__random-post">
           <div class="ratio-container ratio--square">
@@ -40,12 +43,18 @@ $random_posts = new WP_Query( array(
                 'sizes' => '(min-width: 1920px) 720px, (min-width: 768px) 33.33vw, 100vw',
               ) );
             }; ?>
+            <a class="cover" href="<?= get_permalink($random_post->ID); ?>"></a>
           </div>
 
           <?php if ( !empty( $post_data['title'] ) ) : ?>
             <h3 class="h3"><?= $post_data['title']; ?></h3>
           <?php endif; ?>
-          <a class="cover" href="<?= get_permalink(); ?>"></a>
+
+          <?php if ( $has_description ) : ?>
+            <p class="p"><?= $description; ?></p>
+          <?php endif; ?>
+
+          <a class="btn--link" href="<?= get_permalink($random_post->ID); ?>">Læs mere</a>
         </li>
       <?php endforeach; 
       wp_reset_postdata(); ?>

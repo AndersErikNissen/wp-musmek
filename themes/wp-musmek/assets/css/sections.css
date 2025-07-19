@@ -24,7 +24,7 @@
 }
 
 .section-gallery__image-container {
-  flex: 0 0 60%;
+  flex: 0 0 30%;
 }
 
 .section-gallery__image-container img {
@@ -39,7 +39,7 @@
   }
 
   .section-gallery__image-container {
-    flex: 0 0 40%;
+    flex: 0 0 45%;
   }
 }
 
@@ -290,11 +290,9 @@
   margin-bottom: 2rem;
 }
 
-.section-post__random-post {
-  position: relative;
-}
-
-.section-post__random-post .h3 {
+.section-post__random-post .h3,
+.section-post__random-post .p,
+.section-post__random-post .btn--link {
   margin: 1rem 0 0;
 }
 
