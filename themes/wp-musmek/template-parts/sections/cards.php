@@ -29,7 +29,7 @@ if ( count( $cards ) > 0 ) : ?>
             <div class="p rte"><?= $card['description']; ?></div>
           <?php endif; ?>
         </li>
-      <?php endforeach; ?>
+      <?php endforeach; ?> 
     </ul>
   </div>
 </section>

@@ -14,7 +14,7 @@
               Her hos Muskelmekanikeren udøves der fysioterapi og/eller personlig træning i diverse former. Jeg hjælper dig til, at forbedre din præstation, overkomme begrænsende smerter i bevægeapparatet eller opnå en hurtigere recovery imellem dine træninger.
             </p>
 
-            <a class="btn--cta" href="" target="_blank">
+            <a class="btn--cta" href="https://application.complimentawork.dk/CamClientPortal/CamClientPortal.html?clinic=00000A00CA09000007DC81010000018AF9223B242ADFD552" target="_blank">
               Bestil tid
             </a>
           </div>

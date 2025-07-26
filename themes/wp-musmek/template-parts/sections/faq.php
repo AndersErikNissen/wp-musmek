@@ -1,8 +1,13 @@
 <?php
 $data = get_section_data( 'section_faq_', get_the_ID() );
-$has_content = count( $data['questions'] ) > 0;
 
-if ( $data && $has_content ) : ?>
+if ( $data ) : 
+  
+$questions = array_filter( $data['questions'], function( $value ) {
+  return !empty( $value['question'] );
+} ); 
+
+if ( count( $questions ) > 0 ) : ?>
 
 <section class="section-faq" itemscope itemtype="https://schema.org/FAQPage">
   <div class="cols-6">
@@ -38,4 +43,4 @@ if ( $data && $has_content ) : ?>
   </div>
 </section>
 
-<?php endif;
+<?php endif; endif;

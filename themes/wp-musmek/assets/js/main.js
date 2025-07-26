@@ -47,7 +47,7 @@ function swipeGalleryOnScroll() {
   
   // Animation loop
   const images = gallery.querySelector(".section-gallery__images");
-  const heightDivider = 1.5; // If 2, the swiping starts when the top is at the middle of the viewport
+  const heightDivider = 2; // If 2, the swiping starts when the top is at the middle of the viewport
 
   let ticking = false;
   let looping = false;

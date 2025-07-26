@@ -17,7 +17,15 @@ $show_numbers = get_field( 'show_numbers' ); ?>
         <?php if ( !empty( $data['description'] ) ) : ?>
           <p class="p-large"><?= $data['description'] ?></p>
         <?php endif; ?>
-      </div>
+
+        <?php if ( !empty( $data['button'] ) ) : ?>
+          <div class="section-services-overview__btn">
+            <a class="btn" href="<?php echo $data['button']['url']; ?>" target="<?php echo $data['button']['target'] ?? '_self'; ?>">
+              <?php echo $data['button']['title']; ?>
+            </a>
+          </div>
+        </div>
+      <?php endif; ?>
     <?php endif; ?>
 
     <?php if ( $service_posts ) : ?>

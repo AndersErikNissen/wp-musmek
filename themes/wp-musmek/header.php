@@ -43,7 +43,7 @@
           ) ); ?>
 
           <div class="p-the-header__btns">
-            <a class="btn--cta hidden-mobile" href="" target="_blank">
+            <a class="btn--cta hidden-mobile" href="https://application.complimentawork.dk/CamClientPortal/CamClientPortal.html?clinic=00000A00CA09000007DC81010000018AF9223B242ADFD552" target="_blank">
               Bestil tid
             </a>
           </div>

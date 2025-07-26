@@ -29,9 +29,9 @@ if ( isset( $args['heading_class'] ) ) {
 
       <?php if ( !empty( $data['button'] ) && $data['button'] ) : ?>
         <div class="p-section-header__btn">
-        <a class="btn" href="<?php echo $data['button']['url']; ?>" target="<?php echo $data['button']['target'] ?? '_self'; ?>">
-          <?php echo $data['button']['title']; ?>
-        </a>
+          <a class="btn" href="<?php echo $data['button']['url']; ?>" target="<?php echo $data['button']['target'] ?? '_self'; ?>">
+            <?php echo $data['button']['title']; ?>
+          </a>
         </div>
       <?php endif; ?>
     </div>

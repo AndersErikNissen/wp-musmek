@@ -1469,3 +1469,4 @@ Stack trace:
   thrown in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/post.php on line 31
 [18-Jul-2025 21:49:19 UTC] PHP Warning:  Undefined array key "form_shortcode" in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/contact-form.php on line 11
 [19-Jul-2025 18:10:48 UTC] PHP Warning:  Undefined array key "form_shortcode" in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/contact-form.php on line 11
+[23-Jul-2025 16:19:27 UTC] PHP Warning:  Undefined array key "title" in /var/www/html/wp-content/themes/wp-musmek/assets/php/acf.php on line 31
