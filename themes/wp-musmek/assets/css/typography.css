@@ -179,6 +179,11 @@ body {
   display: block;
 }
 
+.rte p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 .rte img {
   display: block;
   width: 100%;
