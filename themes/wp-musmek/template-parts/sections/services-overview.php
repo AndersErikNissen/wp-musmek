@@ -3,8 +3,7 @@ $data = get_section_data( 'section_services_overview_', get_the_ID() );
 
 if ( $data && !empty( $data['services'] ) ) :
 
-$service_posts = $data['services'];
-$show_numbers = get_field( 'show_numbers' ); ?>
+$service_posts = $data['services']; ?>
 
 <section class="section-services-overview section">
   <div class="section-services-overview__content cols-10">
@@ -33,7 +32,7 @@ $show_numbers = get_field( 'show_numbers' ); ?>
         <?php foreach ($service_posts as $key => $post) :
           setup_postdata( $post ); ?>
           <li class="section-services-overview__post">
-            <?php if ( $show_numbers ) : ?>
+            <?php if ( $data['show_numbers'] ) : ?>
               <p class="label">0<?= $key + 1; ?></p>
             <?php endif; ?>
 

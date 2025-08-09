@@ -1470,3 +1470,7 @@ Stack trace:
 [18-Jul-2025 21:49:19 UTC] PHP Warning:  Undefined array key "form_shortcode" in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/contact-form.php on line 11
 [19-Jul-2025 18:10:48 UTC] PHP Warning:  Undefined array key "form_shortcode" in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/contact-form.php on line 11
 [23-Jul-2025 16:19:27 UTC] PHP Warning:  Undefined array key "title" in /var/www/html/wp-content/themes/wp-musmek/assets/php/acf.php on line 31
+[09-Aug-2025 18:33:46 UTC] PHP Warning:  Undefined array key "title" in /var/www/html/wp-content/themes/wp-musmek/assets/php/acf.php on line 31
+[09-Aug-2025 19:10:06 UTC] PHP Warning:  Undefined array key "show_numbers" in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/services-overview.php on line 35
+[09-Aug-2025 19:10:49 UTC] PHP Warning:  Undefined array key "show_numbers" in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/services-overview.php on line 35
+[09-Aug-2025 19:10:50 UTC] PHP Warning:  Undefined array key "show_numbers" in /var/www/html/wp-content/themes/wp-musmek/template-parts/sections/services-overview.php on line 35

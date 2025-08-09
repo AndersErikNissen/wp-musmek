@@ -8,7 +8,7 @@ $service_posts = $data['services'];
 if ( $service_posts ) : ?>
 
 <section class="section-services section">
-  <div class="section-services__content cols-10">
+  <div class="section-services__content cols-8">
     <ul class="section-services__posts">
       <?php foreach ($service_posts as $key => $post) :
         setup_postdata( $post ); ?>
