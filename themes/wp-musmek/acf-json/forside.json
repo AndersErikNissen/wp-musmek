@@ -708,7 +708,7 @@
         },
         {
             "key": "field_6897a4b02d2a8",
-            "label": "Sektion: Ydelser",
+            "label": "Sektion: Ydelses oversigt",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -936,6 +936,105 @@
             "bidirectional_target": []
         },
         {
+            "key": "field_68989d81022d3",
+            "label": "Sektion: Billede",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "left",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_68989d90022d4",
+            "label": "Billede",
+            "name": "section_image_image",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "allow_in_bindings": 0,
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_68989daa022d5",
+            "label": "Billede bredde",
+            "name": "section_image_image_width",
+            "aria-label": "",
+            "type": "radio",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "full": "Fuld",
+                "normal": "Normal",
+                "narrow": "Smal"
+            },
+            "default_value": "",
+            "return_format": "value",
+            "allow_null": 0,
+            "other_choice": 0,
+            "allow_in_bindings": 0,
+            "layout": "vertical",
+            "save_other_choice": 0
+        },
+        {
+            "key": "field_68989dc9022d6",
+            "label": "Billede format",
+            "name": "section_image_image_format",
+            "aria-label": "",
+            "type": "radio",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "natural": "Naturlig",
+                "square": "Firkant",
+                "portrait": "Portræt",
+                "landscape": "Landskap"
+            },
+            "default_value": "",
+            "return_format": "value",
+            "allow_null": 0,
+            "other_choice": 0,
+            "allow_in_bindings": 0,
+            "layout": "vertical",
+            "save_other_choice": 0
+        },
+        {
             "key": "field_6897a4b02fda0",
             "label": "Sektion: Kontakt form",
             "name": "",
@@ -1056,5 +1155,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1754769183
+    "modified": 1754833256
 }

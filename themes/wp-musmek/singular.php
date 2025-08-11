@@ -9,10 +9,8 @@
       if ( is_page( 'indstillinger' ) || is_page( 'options' ) ) {
         // Do nothing!
         // Since it is being redirected, so it's just to be sure no content is rendered...
-      } elseif ( is_single() && !is_404() ) {
+      } elseif ( is_single() ) {
         get_template_part( 'template-parts/sections/post' );
-      } elseif ( is_privacy_policy() ) {
-        get_template_part( 'template-parts/sections/page' );
       } elseif ( is_front_page() ) {
         get_template_part( 'template-parts/sections/text' );
         get_template_part( 'template-parts/sections/gallery' );
@@ -21,9 +19,10 @@
         get_template_part( 'template-parts/sections/image' );
         get_template_part( 'template-parts/sections/contact-form' );
         
-      } elseif ( is_page() && !is_404() ) {
+      } elseif ( is_page() ) {
         get_template_part( 'template-parts/sections/text' );
         get_template_part( 'template-parts/sections/image' );
+        get_template_part( 'template-parts/sections/content' );
         get_template_part( 'template-parts/sections/services' );
         get_template_part( 'template-parts/sections/cards' );
         get_template_part( 'template-parts/sections/faq' );

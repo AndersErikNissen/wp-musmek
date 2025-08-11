@@ -15,22 +15,22 @@ if ( isset( $args['heading_class'] ) ) {
 
   if ( $data['title'] || $data['description'] ) : ?>
     <div class="p-section-header cols-6">
-      <?php if ( !empty( $data['title'] ) && $data['title'] ) {
+      <?php if ( isset( $data['title'] ) && !empty( $data['title'] ) ) {
         echo '<' . $heading_tag . ' class="text-center ' . $heading_class . '">';
         echo $data['title'];
         echo '</' . $heading_tag . '>';
       }; ?>
 
-      <?php if ( !empty( $data['description'] ) && $data['description'] ) : ?>
+      <?php if ( isset( $data['description'] ) && !empty( $data['description'] ) ) : ?>
         <p class="p-large text-center">
-          <?php echo $data['description']; ?>
+          <?= $data['description']; ?>
         </p>
       <?php endif; ?>
 
       <?php if ( !empty( $data['button'] ) && $data['button'] ) : ?>
         <div class="p-section-header__btn">
           <a class="btn" href="<?php echo $data['button']['url']; ?>" target="<?php echo $data['button']['target'] ?? '_self'; ?>">
-            <?php echo $data['button']['title']; ?>
+            <?= $data['button']['title']; ?>
           </a>
         </div>
       <?php endif; ?>
