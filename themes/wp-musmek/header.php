@@ -4,8 +4,17 @@
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?php bloginfo('description'); ?>" />
+
     <?php wp_head(); ?>
+    
+    <?php if ( is_page( 'booking' ) ) : ?>
+      <meta property="og:title" content="Booking hos Muskelmekanikeren" />
+      <meta property="og:description" content="Book en tid til fysioterapi, akupunktur eller personlig/hold træning." />
+      <meta property="og:image" content="<?= get_template_directory_uri() . '/assets/media/og_image.jpg'; ?>" />
+      <meta http-equiv="refresh" content="0;url=https://application.complimentawork.dk/CamClientPortal/CamClientPortal.html?clinic=00000A00CA09000007DC81010000018AF9223B242ADFD552">
+    <?php endif; ?>
   </head>
+  
   <body <?php body_class(); ?>>
     <?php wp_body_open(); ?>
     <div id="Page">
