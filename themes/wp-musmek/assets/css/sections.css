@@ -24,7 +24,7 @@
 }
 
 .section-gallery__image-container {
-  flex: 0 0 30%;
+  flex: 0 0 70%;
 }
 
 .section-gallery__image-container img {
@@ -57,7 +57,7 @@
 
 .section-services-overview__aside {
   flex: 0 0 calc(40% - 2rem);
-  background-color: var(--color-white);
+  background-color: var(--color-sand);
   margin-top: -1px;
 }
 
@@ -72,7 +72,7 @@
 .section-services-overview__post:nth-child(n + 2) {
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--color-grey);
+  border-top: 1px solid var(--color-pink);
 }
 
 .section-services-overview__btn {
@@ -130,7 +130,7 @@
 .section-reviews__reviews {
   display: grid;
   gap: var(--pw-margin);
-  color: var(--color-orange--950);
+  color: var(--color-dark-green);
 }
 
 @media (max-width: 767px) {
@@ -173,9 +173,9 @@
 /* SECTION: FAQ */
 
 .section-faq {
-  background-color: var(--color-orange--50);
+  background-color: var(--color-pink);
   padding: 6rem 0;
-  color: var(--color-orange--950);
+  color: var(--color-dark-green);
 }
 
 .section-faq__question {
@@ -273,7 +273,7 @@
 }
 
 .section-posts__pagination span {
-  color: var(--color-white);
+  color: var(--color-sand);
   background-color: var(--color-black);
 }
 
@@ -292,6 +292,10 @@
 /* SECTION: POST */
 /* SECTION: POST */
 /* SECTION: POST */
+
+.section-post {
+  margin-bottom: 3rem;
+}
 
 .section-post__image {
   margin-top: 2rem;
@@ -333,8 +337,8 @@
 
 .section-cards__card {
   padding: 2rem;
-  color: var(--color-orange--950);
-  background-color: var(--color-orange--50);
+  color: var(--color-dark-orange);
+  background-color: var(--color-green);
   border-radius: 2rem;
 }
 
@@ -342,4 +346,19 @@
   .section-cards__cards {
     grid-template-columns: repeat(var(--columns, 2), 1fr);
   }
+}
+
+/* SECTION: LINKS */
+/* SECTION: LINKS */
+/* SECTION: LINKS */
+
+.section-links { 
+  margin-top: 3rem;
+}
+
+
+.section-links__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pw-margin);
 }

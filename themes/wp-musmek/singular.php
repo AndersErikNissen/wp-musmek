@@ -11,6 +11,8 @@
         // Since it is being redirected, so it's just to be sure no content is rendered...
       } elseif ( is_single() ) {
         get_template_part( 'template-parts/sections/post' );
+        get_template_part( 'template-parts/sections/links' );
+        get_template_part( 'template-parts/sections/faq' );
       } elseif ( is_front_page() ) {
         get_template_part( 'template-parts/sections/text' );
         get_template_part( 'template-parts/sections/gallery' );

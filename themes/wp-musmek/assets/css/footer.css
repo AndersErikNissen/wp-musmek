@@ -1,6 +1,6 @@
 .p-the-footer {
-  color: var(--color-white);
-  background-color: var(--color-black);
+  color: var(--color-sand);
+  background-color: var(--color-dark-green);
   padding: 2rem 1.25rem 2rem;
 }
 
@@ -20,6 +20,17 @@
   margin-top: 1.25rem;
 }
 
+.p-the-footer__logo {
+  width: 52px;
+  height: auto;
+}
+
+.p-the-footer__logo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .p-the-footer__lists {
   display: flex;
   gap: 2rem;
@@ -27,7 +38,8 @@
 }
 
 .p-the-footer__list-label {
-  font-weight: 700;
+  font-family: "Lexend", Arial, Helvetica, sans-serif;
+  font-weight: 500;
   margin-bottom: 0.5rem;
 }
 

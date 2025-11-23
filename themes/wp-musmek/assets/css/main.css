@@ -4,25 +4,26 @@
   /* NEUTRAL COLORS */
 
   --color-black: #111111;
-  --color-grey--dark: #434343;
   --color-white: #FFFFFF;
-  --color-grey: #D2D2D2;
 
   /* MAIN COLORs */
   /* MAIN COLORs */
   /* MAIN COLORs */
 
-  --color-orange--950: #431205;
-  --color-orange--900: #742813;
-  --color-orange--800: #8d3013;
-  --color-orange--700: #ae3d0f;
-  --color-orange--600: #d25a0d;
-  --color-orange--500: #ed7d13;
-  --color-orange--400: #F4A436;
-  --color-orange--300: #f6b953;
-  --color-orange--200: #f9d58e;
-  --color-orange--100: #fcebc9;
-  --color-orange--50: #fef8ec;
+  --color-orange: #e0a342;
+  --color-dark-orange: #D88327;
+
+  --color-sand: #fdf6ea;
+  --color-dark-sand: #EBE0D6;
+
+  --color-green: #215439;
+  --color-dark-green: #003A23;
+
+  --color-pink: #ebc3d9;
+  --color-dark-pink: #F397BE;
+
+  --color-grey: #d5e1e1;
+  --color-dark-grey: #9FC4C5;
 
   /* SIZING */
   /* SIZING */
@@ -40,15 +41,15 @@
 }
 
 body {
-  background-color: var(--color-white);
+  background-color: var(--color-sand);
 }
 
 img {
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
 }
 
 ::selection {
-  background: var(--color-orange--400);
+  background: var(--color-orange);
 }
 
 .header-hidden {
@@ -98,9 +99,9 @@ img {
 }
 
 .btn--cta {
-  color: var(--color-orange--950);
-  border: 1px solid var(--color-orange--400);
-  background-color: var(--color-orange--400);
+  color: var(--color-dark-green);
+  border: 1px solid var(--color-orange);
+  background-color: var(--color-orange);
 }
 
 .btn:hover,
@@ -116,11 +117,13 @@ img {
 
 .btn--link {
   display: inline-block;
-  font-weight: 700;
+  font-family: "Lexend", Arial, Helvetica, sans-serif;
+  font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 0.45rem;
   transition: text-underline-offset 150ms ease-in;
   padding-bottom: 0.45rem;
+  color: var(--color-dark-orange);
 }
 
 .btn--link:hover {
@@ -259,6 +262,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  color: var(--color-dark-orange);
 }
 
 .wpcf7-form > p {
@@ -269,6 +273,11 @@ img {
 input.wpcf7-form-control {
   font-size: 1rem;
   line-height: 1;
+  background-color: var(--color-dark-sand);
+}
+
+.wpcf7-textarea {
+  background-color: var(--color-dark-sand);
 }
 
 .wpcf7-form .label-text {
@@ -284,25 +293,25 @@ input.wpcf7-form-control {
 
 .wpcf7-form > p:focus-within .label-text,
 .label-text.has-value  {
-  color: var(--color-grey--dark);
+  color: var(--color-orange);
   transform: scale(0.8) translateY(-1rem);
 }
 
 .wpcf7-not-valid-tip {
   margin-top: 0.25rem;
-  color: var(--color-orange--400);
+  color: var(--color-orange);
 }
 
 .wpcf7-form input:focus-visible,
 .wpcf7-form textarea:focus-visible {
-  outline-color: var(--color-orange--400);
+  outline-color: var(--color-orange);
 }
 
 input:not([type="submit"]).wpcf7-form-control,
 textarea.wpcf7-form-control {
   display: inline-block;
   border-radius: 0.75rem;
-  border: 1px solid var(--color-grey);
+  border: 1px solid transparent;
   padding: 1.5rem 1.25rem 1rem;
   width: 100%;
 }

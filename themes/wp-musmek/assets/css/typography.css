@@ -9,8 +9,9 @@
 
 @font-face {
   font-family: "Outfit";
-  src: url("../fonts/Outfit-Light.woff2") format("woff2"), url("../fonts/Outfit-Light.woff") format("woff"),
-    url("../fonts/Outfit-Light.ttf") format("truetype");
+  src: url("../fonts/Outfit-Light.woff2") format("woff2"), 
+       url("../fonts/Outfit-Light.woff") format("woff"),
+       url("../fonts/Outfit-Light.ttf") format("truetype");
   font-weight: 300;
   font-display: swap;
   font-style: normal;
@@ -18,8 +19,9 @@
 
 @font-face {
   font-family: "Outfit";
-  src: url("../fonts/Outfit-Regular.woff2") format("woff2"), url("../fonts/Outfit-Regular.woff") format("woff"),
-    url("../fonts/Outfit-Regular.ttf") format("truetype");
+  src: url("../fonts/Outfit-Regular.woff2") format("woff2"), 
+       url("../fonts/Outfit-Regular.woff") format("woff"),
+       url("../fonts/Outfit-Regular.ttf") format("truetype");
   font-weight: 400;
   font-display: swap;
   font-style: normal;
@@ -27,8 +29,9 @@
 
 @font-face {
   font-family: "Outfit";
-  src: url("../fonts/Outfit-Medium.woff2") format("woff2"), url("../fonts/Outfit-Medium.woff") format("woff"),
-    url("../fonts/Outfit-Medium.ttf") format("truetype");
+  src: url("../fonts/Outfit-Medium.woff2") format("woff2"), 
+       url("../fonts/Outfit-Medium.woff") format("woff"),
+       url("../fonts/Outfit-Medium.ttf") format("truetype");
   font-weight: 500;
   font-display: swap;
   font-style: normal;
@@ -36,8 +39,9 @@
 
 @font-face {
   font-family: "Outfit";
-  src: url("../fonts/Outfit-Bold.woff2") format("woff2"), url("../fonts/Outfit-Bold.woff") format("woff"),
-    url("../fonts/Outfit-Bold.ttf") format("truetype");
+  src: url("../fonts/Outfit-Bold.woff2") format("woff2"), 
+       url("../fonts/Outfit-Bold.woff") format("woff"),
+       url("../fonts/Outfit-Bold.ttf") format("truetype");
   font-weight: 700;
   font-display: swap;
   font-style: normal;
@@ -45,9 +49,32 @@
 
 @font-face {
   font-family: "Outfit";
-  src: url("../fonts/Outfit-ExtraBold.woff2") format("woff2"), url("../fonts/Outfit-ExtraBold.woff") format("woff"),
-    url("../fonts/Outfit-ExtraBold.ttf") format("truetype");
+  src: url("../fonts/Outfit-ExtraBold.woff2") format("woff2"), 
+       url("../fonts/Outfit-ExtraBold.woff") format("woff"),
+       url("../fonts/Outfit-ExtraBold.ttf") format("truetype");
   font-weight: 800;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("../fonts/Outfit-ExtraBold.woff2") format("woff2"), 
+       url("../fonts/Outfit-ExtraBold.woff") format("woff"),
+       url("../fonts/Outfit-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lexend";
+  src: url('../fonts/Lexend-Medium.eot');
+  src: url('../fonts/Lexend-Medium.eot') format('embedded-opentype'),
+       url('../fonts/Lexend-Medium.woff2') format('woff2'),
+       url('../fonts/Lexend-Medium.woff') format('woff'),
+       url('../fonts/Lexend-Medium.ttf') format('truetype');
+  font-weight: 500;
   font-display: swap;
   font-style: normal;
 }
@@ -71,8 +98,9 @@ body {
 .rte h4,
 .rte h5,
 .rte h6 {
-  line-height: 1.15;
-  font-weight: 800;
+  font-family: "Lexend", Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  line-height: 1.125;
 }
 
 .h1,
@@ -275,10 +303,10 @@ body {
 
 .rte blockquote {
   padding: 1.25rem 1.5rem;
-  background-color: var(--color-orange--100);
+  color: var(--color-dark-pink);
+  background-color: var(--color-green);
   border-radius: 0.75rem;
   font-style: italic;
-  color: var(--color-orange--800);
 }
 
 .rte strong {
