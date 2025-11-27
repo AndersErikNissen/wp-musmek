@@ -279,8 +279,7 @@ body {
   width: calc(100% + 1.5rem);
   height: 1px;
   right: 0;
-  background-color: currentColor;
-  opacity: 0.2;
+  background-color: var(--color-pink);
 }
 
 .rte ul li::before,
@@ -303,8 +302,8 @@ body {
 
 .rte blockquote {
   padding: 1.25rem 1.5rem;
-  color: var(--color-dark-pink);
-  background-color: var(--color-green);
+  background-color: var(--color-grey);
+  color: var(--color-dark-green);
   border-radius: 0.75rem;
   font-style: italic;
 }
