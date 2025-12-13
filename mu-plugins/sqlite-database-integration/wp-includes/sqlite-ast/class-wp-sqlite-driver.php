@@ -295,6 +295,99 @@ class WP_SQLite_Driver {
 	);
 
 	/**
+	 * A map of MySQL column data types to native types in MySQL column meta.
+	 *
+	 * This maps normalized MySQL column data types (as per information schema)
+	 * to MySQL "PDOStatement::getColumnMeta()" data types in the "native_type"
+	 * field, as well as the "len" and "precision" fields, where applicable:
+	 *
+	 *     <mysql-column-type> => array( <native_type>, <mysqli_type>, <len>, <precision> )
+	 *
+	 * This is used to compute the column metadata from the information schema.
+	 */
+	const COLUMN_INFO_MYSQL_TO_NATIVE_TYPES_MAP = array(
+		// Numeric data types:
+		'bit'             => array( 'BIT', 16, 1, 0 ),
+		'tinyint'         => array( 'TINY', 1, 4, 0 ),
+		'smallint'        => array( 'SHORT', 2, 6, 0 ),
+		'mediumint'       => array( 'INT24', 9, 9, 0 ),
+		'int'             => array( 'LONG', 3, 11, 0 ),
+		'bigint'          => array( 'LONGLONG', 8, 20, 0 ),
+		'float'           => array( 'FLOAT', 4, 12, 31 ),
+		'double'          => array( 'DOUBLE', 5, 22, 31 ),
+		'decimal'         => array( 'NEWDECIMAL', 246, null, null ),
+
+		// String data types:
+		'char'            => array( 'STRING', 254, null, 0 ),
+		'varchar'         => array( 'VAR_STRING', 253, null, 0 ),
+		'tinytext'        => array( 'BLOB', 252, null, 0 ),
+		'text'            => array( 'BLOB', 252, null, 0 ),
+		'mediumtext'      => array( 'BLOB', 252, null, 0 ),
+		'longtext'        => array( 'BLOB', 252, null, 0 ),
+		'enum'            => array( 'STRING', 254, null, 0 ),
+		'set'             => array( 'STRING', 254, null, 0 ),
+		'json'            => array( 'BLOB', 245, 4294967295, 0 ),
+
+		// Date and time data types:
+		'date'            => array( 'DATE', 10, 10, 0 ),
+		'time'            => array( 'TIME', 11, 10, 0 ),
+		'datetime'        => array( 'DATETIME', 12, 19, 0 ),
+		'timestamp'       => array( 'TIMESTAMP', 7, 19, 0 ),
+		'year'            => array( 'YEAR', 13, 4, 0 ),
+
+		// Binary data types:
+		'binary'          => array( 'BLOB', 254, null, 0 ),
+		'varbinary'       => array( 'BLOB', 253, null, 0 ),
+		'tinyblob'        => array( 'BLOB', 252, null, 0 ),
+		'blob'            => array( 'BLOB', 252, null, 0 ),
+		'mediumblob'      => array( 'BLOB', 252, null, 0 ),
+		'longblob'        => array( 'BLOB', 252, null, 0 ),
+
+		// Spatial data types:
+		'geometry'        => array( 'GEOMETRY', 255, 4294967295, 0 ),
+		'point'           => array( 'GEOMETRY', 255, 4294967295, 0 ),
+		'linestring'      => array( 'GEOMETRY', 255, 4294967295, 0 ),
+		'polygon'         => array( 'GEOMETRY', 255, 4294967295, 0 ),
+		'multipoint'      => array( 'GEOMETRY', 255, 4294967295, 0 ),
+		'multilinestring' => array( 'GEOMETRY', 255, 4294967295, 0 ),
+		'multipolygon'    => array( 'GEOMETRY', 255, 4294967295, 0 ),
+		'geomcollection'  => array( 'GEOMETRY', 255, 4294967295, 0 ),
+	);
+
+	/**
+	 * A map of SQLite column definition data types and SQLite column meta data
+	 * types to native types in MySQL column meta.
+	 *
+	 * This maps both SQLite column definition data types and SQLite column meta
+	 * data types (as per "PDOStatement::getColumnMeta()") to MySQL column meta
+	 * "native_type" field, as per "PDOStatement::getColumnMeta()", as well as
+	 * the "len" and "precision" fields, where applicable:
+	 *
+	 *     <sqlite-column-definition-type> => array( <native_type>, <mysqli_type>, <len>, <precision> )
+	 *     <sqlite-column-meta-type>       => array( <native_type>, <mysqli_type>, <len>, <precision> )
+	 *
+	 * This is used to compute the MySQL column metadata for non-column fields
+	 * that have no records in the information schema (i.e., expressions).
+	 */
+	const COLUMN_INFO_SQLITE_TO_NATIVE_TYPES_MAP = array(
+		'NULL'    => array( 'NULL', 6, 0, 0 ),
+		'INT'     => array( 'LONGLONG', 8, 21, 0 ),
+		'INTEGER' => array( 'LONGLONG', 8, 21, 0 ),
+		'STRING'  => array( 'VAR_STRING', 253, 65535, 31 ),
+		'TEXT'    => array( 'BLOB', 252, null, 0 ),
+		'REAL'    => array( 'DOUBLE', 5, 22, 31 ),
+		'DOUBLE'  => array( 'DOUBLE', 5, 23, 31 ),
+		'BLOB'    => array( 'BLOB', 252, null, 0 ),
+	);
+
+	/**
+	 * The version of the MySQL server that the driver is configured for.
+	 *
+	 * @var int
+	 */
+	private $mysql_version;
+
+	/**
 	 * The SQLite engine version.
 	 *
 	 * This is a mysqli-like property that is needed to avoid a PHP warning in
@@ -377,6 +470,13 @@ class WP_SQLite_Driver {
 	 * @var mixed
 	 */
 	private $last_return_value;
+
+	/**
+	 * SQLite column metadata for the last emulated query.
+	 *
+	 * @var array
+	 */
+	private $last_column_meta = array();
 
 	/**
 	 * Number of rows found by the last SQL_CALC_FOUND_ROW query.
@@ -470,10 +570,15 @@ class WP_SQLite_Driver {
 	 *
 	 * @throws WP_SQLite_Driver_Exception When the driver initialization fails.
 	 */
-	public function __construct( WP_SQLite_Connection $connection, string $database ) {
-		$this->connection   = $connection;
-		$this->main_db_name = $database;
-		$this->db_name      = $database;
+	public function __construct(
+		WP_SQLite_Connection $connection,
+		string $database,
+		int $mysql_version = 80038
+	) {
+		$this->mysql_version = $mysql_version;
+		$this->connection    = $connection;
+		$this->main_db_name  = $database;
+		$this->db_name       = $database;
 
 		// Check the database name.
 		if ( '' === $this->db_name ) {
@@ -483,13 +588,48 @@ class WP_SQLite_Driver {
 		// Check the SQLite version.
 		$sqlite_version = $this->get_sqlite_version();
 		if ( version_compare( $sqlite_version, self::MINIMUM_SQLITE_VERSION, '<' ) ) {
-			throw $this->new_driver_exception(
-				sprintf(
-					'The SQLite version %s is not supported. Minimum required version is %s.',
-					$sqlite_version,
-					self::MINIMUM_SQLITE_VERSION
-				)
-			);
+			if ( defined( 'WP_SQLITE_UNSAFE_ENABLE_UNSUPPORTED_VERSIONS' ) && WP_SQLITE_UNSAFE_ENABLE_UNSUPPORTED_VERSIONS ) {
+				// When "WP_SQLITE_UNSAFE_ENABLE_UNSUPPORTED_VERSIONS" is enabled,
+				// allow using legacy SQLite versions, but not older than 3.27.0.
+				if ( version_compare( $sqlite_version, '3.27.0', '<' ) ) {
+					throw $this->new_driver_exception(
+						sprintf(
+							'The SQLite version %s is not supported. Minimum required version is %s.'
+								. ' With "WP_SQLITE_UNSAFE_ENABLE_UNSUPPORTED_VERSIONS" enabled, you must use 3.27.0 or newer.',
+							$sqlite_version,
+							self::MINIMUM_SQLITE_VERSION
+						)
+					);
+				}
+
+				/*
+				 * SQLite versions prior to 3.37.0 do not support STRICT tables.
+				 *
+				 * However, a database created with SQLite >= 3.37.0 can be used
+				 * with SQLite versions < 3.37.0 when "PRAGMA writable_schema" is
+				 * set to "ON", which also enables error-tolerant schema parsing.
+				 *
+				 * This is an unsafe opt-in feature for special back compatibility
+				 * use cases, as it can corrupt the database by allowing incorrect
+				 * types into STRICT tables. Additionally, depending on the legacy
+				 * SQLite version used, there is no guarantee that all features of
+				 * the SQLite driver will work as expected. Use this with caution.
+				 *
+				 * See: https://www.sqlite.org/stricttables.html#accessing_strict_tables_in_earlier_versions_of_sqlite
+				 *
+				 * TODO: Remove this flag when we drop support for PHP 8.0.
+				 *       From PHP 8.1, SQLite 3.46.1 is used by default.
+				 */
+				$this->execute_sqlite_query( 'PRAGMA writable_schema=ON' );
+			} else {
+				throw $this->new_driver_exception(
+					sprintf(
+						'The SQLite version %s is not supported. Minimum required version is %s.',
+						$sqlite_version,
+						self::MINIMUM_SQLITE_VERSION
+					)
+				);
+			}
 		}
 
 		// Load SQLite version to a property used by WordPress health info.
@@ -508,13 +648,12 @@ class WP_SQLite_Driver {
 
 		// Initialize information schema builder.
 		$this->information_schema_builder = new WP_SQLite_Information_Schema_Builder(
-			$this->main_db_name,
 			self::RESERVED_PREFIX,
 			$this->connection
 		);
 
 		// Ensure that the database is configured.
-		$migrator = new WP_SQLite_Configurator( $this->db_name, $this, $this->information_schema_builder );
+		$migrator = new WP_SQLite_Configurator( $this, $this->information_schema_builder );
 		$migrator->ensure_database_configured();
 
 		$this->connection->set_query_logger(
@@ -568,32 +707,6 @@ class WP_SQLite_Driver {
 		} catch ( PDOException $e ) {
 			if ( str_contains( $e->getMessage(), 'no such table' ) ) {
 				return $default_version;
-			}
-			throw $e;
-		}
-	}
-
-	/**
-	 * Get the database name saved in the database.
-	 *
-	 * The saved database name represents the database name that was used when
-	 * the database was initialized and configured.
-	 *
-	 * @return string The database name.
-	 * @throws PDOException When the query execution fails.
-	 */
-	public function get_saved_database_name(): string {
-		try {
-			$schemata_table = $this->information_schema_builder->get_table_name( false, 'schemata' );
-			return $this->execute_sqlite_query(
-				sprintf(
-					'SELECT SCHEMA_NAME FROM %s WHERE SCHEMA_NAME != "information_schema" LIMIT 1',
-					$this->quote_sqlite_identifier( $schemata_table )
-				)
-			)->fetchColumn() ?? '';
-		} catch ( PDOException $e ) {
-			if ( str_contains( $e->getMessage(), 'no such table' ) ) {
-				return '';
 			}
 			throw $e;
 		}
@@ -752,6 +865,176 @@ class WP_SQLite_Driver {
 	 */
 	public function get_last_return_value() {
 		return $this->last_return_value;
+	}
+
+	/**
+	 * Get the number of columns returned by the last emulated query.
+	 *
+	 * @return int
+	 */
+	public function get_last_column_count(): int {
+		return count( $this->last_column_meta );
+	}
+
+	/**
+	 * Get column metadata for results of the last emulated query.
+	 *
+	 * @return array
+	 */
+	public function get_last_column_meta(): array {
+		// Build the column metadata as per "PDOStatement::getColumnMeta()".
+		$column_meta = array();
+		foreach ( $this->last_column_meta as $meta ) {
+			$table = $meta['table'] ?? null;
+			$name  = $meta['name'];
+			$type  = strtoupper( $meta['sqlite:decl_type'] ?? $meta['native_type'] ?? '' );
+
+			// When table is known, we can get data from the information schema.
+			$column_info = null;
+			if ( null !== $table ) {
+				$table_is_temporary = $this->information_schema_builder->temporary_table_exists( $table );
+				$columns_table      = $this->information_schema_builder->get_table_name( $table_is_temporary, 'columns' );
+				$column_info        = $this->execute_sqlite_query(
+					sprintf(
+						'
+							SELECT
+								IS_NULLABLE,
+								DATA_TYPE,
+								COLUMN_TYPE,
+								COLUMN_KEY,
+								CHARACTER_MAXIMUM_LENGTH,
+								NUMERIC_PRECISION,
+								NUMERIC_SCALE
+							FROM %s
+							WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND COLUMN_NAME = ?
+						',
+						$this->quote_sqlite_identifier( $columns_table )
+					),
+					array( $this->get_saved_db_name(), $table, $name )
+				)->fetch( PDO::FETCH_ASSOC );
+
+				if ( false === $column_info ) {
+					$column_info = null;
+				}
+			}
+
+			// If we have information schema data, we can use it.
+			if ( null !== $column_info ) {
+				$type_info = self::COLUMN_INFO_MYSQL_TO_NATIVE_TYPES_MAP[ $column_info['DATA_TYPE'] ] ?? null;
+				if ( null === $type_info ) {
+					$type_info = self::COLUMN_INFO_SQLITE_TO_NATIVE_TYPES_MAP[ $type ] ?? null;
+				}
+				$native_type = $type_info[0];
+				$mysqli_type = $type_info[1];
+				$len         = $type_info[2];
+				$precision   = $type_info[3];
+
+				if ( 'tinyint(1)' === $column_info['COLUMN_TYPE'] ) {
+					$len = 1;
+				}
+
+				if ( 'decimal' === $column_info['DATA_TYPE'] ) {
+					$len       = (int) $column_info['NUMERIC_PRECISION'] + (int) $column_info['NUMERIC_SCALE'];
+					$precision = (int) $column_info['NUMERIC_SCALE'];
+				}
+
+				if (
+					str_contains( $column_info['COLUMN_TYPE'], 'unsigned' )
+					&& ! str_contains( $column_info['COLUMN_TYPE'], 'bigint' )
+				) {
+					$len -= 1;
+				}
+
+				// If set, lenght can be taken from the information schema.
+				if ( isset( $column_info['CHARACTER_MAXIMUM_LENGTH'] ) ) {
+					$len = (int) $column_info['CHARACTER_MAXIMUM_LENGTH'];
+				}
+
+				// For string types, the length is multiplied by the maximum number
+				// of bytes per character for the used connection encoding. In our
+				// case, it's always "utf8mb4" and therefore 4 bytes per character.
+				if (
+					str_contains( $column_info['DATA_TYPE'], 'text' )
+					|| str_contains( $column_info['DATA_TYPE'], 'char' )
+					|| 'enum' === $column_info['DATA_TYPE']
+					|| 'set' === $column_info['DATA_TYPE']
+				) {
+					// Except for "longtext" - this might be a MySQL bug.
+					if ( 'longtext' !== $column_info['DATA_TYPE'] ) {
+						$len = 4 * $len;
+					}
+				}
+
+				// Flags.
+				$flags = array();
+				if ( 'NO' === $column_info['IS_NULLABLE'] ) {
+					$flags[] = 'not_null';
+				}
+				if ( 'PRI' === $column_info['COLUMN_KEY'] ) {
+					$flags[] = 'primary_key';
+				} elseif ( 'UNI' === $column_info['COLUMN_KEY'] ) {
+					$flags[] = 'unique_key';
+				} elseif ( 'MUL' === $column_info['COLUMN_KEY'] ) {
+					$flags[] = 'multiple_key';
+				}
+			} else {
+				$type_info   = self::COLUMN_INFO_SQLITE_TO_NATIVE_TYPES_MAP[ $type ];
+				$native_type = $type_info[0];
+				$mysqli_type = $type_info[1];
+				$len         = $type_info[2] ?? 0;
+				$precision   = $type_info[3];
+
+				// Flags.
+				$flags = array();
+				if ( 'NULL' !== $type ) {
+					$flags[] = 'not_null';
+				}
+			}
+
+			if ( 'BLOB' === $native_type || 'GEOMETRY' === $native_type ) {
+				$flags[] = 'blob';
+			}
+
+			// PDO type.
+			if ( 'INT' === $type || 'INTEGER' === $type ) {
+				$pdo_type = PDO::PARAM_INT;
+			} else {
+				$pdo_type = PDO::PARAM_STR;
+			}
+
+			// MySQLi charset number.
+			$is_string   = 'STRING' === $type || 'TEXT' === $type;
+			$is_binary   = 'BLOB' === $type || 'GEOMETRY' === $native_type;
+			$is_datetime = str_contains( $native_type, 'DATE' ) || str_contains( $native_type, 'TIME' ) || 'YEAR' === $native_type;
+			if ( $is_string && ! $is_binary && ! $is_datetime ) {
+				$mysqli_charsetnr = 255; // utf8mb4_0900_ai_ci
+			} else {
+				$mysqli_charsetnr = 63;  // binary
+			}
+
+			$column_meta[] = array(
+				'native_type'      => $native_type,
+				'pdo_type'         => $pdo_type,
+				'flags'            => $flags,
+				'table'            => $meta['table'] ?? '',
+				'name'             => $meta['name'],
+				'len'              => $len,
+				'precision'        => $precision,
+				'sqlite:decl_type' => $meta['sqlite:decl_type'] ?? '',
+
+				/*
+				 * The MySQLi PHP extension exposes more MySQL column metadata than PDO.
+				 * We'll add the data here for use cases such as "wpdb::get_col_info()".
+				 */
+				'mysqli:orgname'   => $meta['name'],        // TODO: Use correct original name when alias is used.
+				'mysqli:orgtable'  => $meta['table'] ?? '', // TODO: Use correct original name when table alias is used.
+				'mysqli:db'        => $this->db_name,       // TODO: Use correct DB for queries to information schema.
+				'mysqli:charsetnr' => $mysqli_charsetnr,
+				'mysqli:flags'     => 0,                    // TODO: We can compute correct MySQL flags.
+				'mysqli:type'      => $mysqli_type,
+			);
+		}
+		return $column_meta;
 	}
 
 	/**
@@ -1197,6 +1480,35 @@ class WP_SQLite_Driver {
 
 		// Execute the query.
 		$stmt = $this->execute_sqlite_query( $query );
+
+		// Store column meta info. This must be done before fetching data, which
+		// seems to erase type information for expressions in the SELECT clause.
+		$this->last_column_meta = array();
+		for ( $i = 0; $i < $stmt->columnCount(); $i++ ) {
+			/*
+			 * Workaround for PHP PDO SQLite bug (#79664) in PHP < 7.3.
+			 * See also: https://github.com/php/php-src/pull/5654
+			 */
+			if ( PHP_VERSION_ID < 70300 ) {
+				try {
+					$this->last_column_meta[] = $stmt->getColumnMeta( $i );
+				} catch ( Throwable $e ) {
+					$this->last_column_meta[] = array(
+						'native_type' => 'null',
+						'pdo_type'    => PDO::PARAM_NULL,
+						'flags'       => array(),
+						'table'       => '',
+						'name'        => '',
+						'len'         => -1,
+						'precision'   => 0,
+					);
+				}
+				continue;
+			}
+
+			$this->last_column_meta[] = $stmt->getColumnMeta( $i );
+		}
+
 		$this->set_results_from_fetched_data(
 			$stmt->fetchAll( $this->pdo_fetch_mode )
 		);
@@ -1217,17 +1529,39 @@ class WP_SQLite_Driver {
 
 		$parts = array();
 		foreach ( $node->get_children() as $child ) {
-			if ( $child instanceof WP_MySQL_Token && WP_MySQL_Lexer::IGNORE_SYMBOL === $child->id ) {
+			$is_token = $child instanceof WP_MySQL_Token;
+			$is_node  = $child instanceof WP_Parser_Node;
+
+			// Skip the SET keyword in "INSERT INTO ... SET ..." syntax.
+			if ( $is_token && WP_MySQL_Lexer::SET_SYMBOL === $child->id ) {
+				continue;
+			}
+
+			if ( $is_token && WP_MySQL_Lexer::IGNORE_SYMBOL === $child->id ) {
 				// Translate "UPDATE IGNORE" to "UPDATE OR IGNORE".
 				$parts[] = 'OR IGNORE';
 			} elseif (
 				$is_non_strict_mode
-				&& $child instanceof WP_Parser_Node
-				&& ( 'insertFromConstructor' === $child->rule_name || 'insertQueryExpression' === $child->rule_name )
+				&& $is_node
+				&& (
+					'insertFromConstructor' === $child->rule_name
+					|| 'insertQueryExpression' === $child->rule_name
+					|| 'updateList' === $child->rule_name
+				)
 			) {
 				$table_ref  = $node->get_first_child_node( 'tableRef' );
 				$table_name = $this->unquote_sqlite_identifier( $this->translate( $table_ref ) );
 				$parts[]    = $this->translate_insert_or_replace_body_in_non_strict_mode( $table_name, $child );
+			} elseif ( $is_node && 'updateList' === $child->rule_name ) {
+				// Convert "SET c1 = v1, c2 = v2, ... to "(c1, c2, ...) VALUES (v1, v2, ...)".
+				$columns = array();
+				$values  = array();
+				foreach ( $child->get_child_nodes( 'updateElement' ) as $update_element ) {
+					$column_ref = $update_element->get_first_child_node( 'columnRef' );
+					$columns[]  = $this->translate( $column_ref );
+					$values[]   = $this->translate( $update_element->get_first_child_node( 'expr' ) );
+				}
+				$parts[] = '(' . implode( ', ', $columns ) . ') VALUES (' . implode( ', ', $values ) . ')';
 			} else {
 				$parts[] = $this->translate( $child );
 			}
@@ -1277,41 +1611,203 @@ class WP_SQLite_Driver {
 			&& ! $this->is_sql_mode_active( 'STRICT_ALL_TABLES' )
 		);
 
-		// Iterate and translate the update statement children.
-		$parts = array();
-		foreach ( $node->get_children() as $child ) {
-			if ( $child instanceof WP_MySQL_Token && WP_MySQL_Lexer::IGNORE_SYMBOL === $child->id ) {
-				// Translate "UPDATE IGNORE" to "UPDATE OR IGNORE".
-				$parts[] = 'OR IGNORE';
-			} elseif (
-				$is_non_strict_mode
-				&& $child instanceof WP_Parser_Node
-				&& 'updateList' === $child->rule_name
-			) {
-				$table_ref  = $node->get_first_child_node( 'tableReferenceList' )->get_first_child_node( 'tableReference' );
-				$table_name = $this->unquote_sqlite_identifier( $this->translate( $table_ref ) );
-				$parts[]    = $this->translate_update_list_in_non_strict_mode( $table_name, $child );
-			} else {
-				$parts[] = $this->translate( $child );
-			}
+		/*
+		 * Translate the UPDATE statement parts.
+		 *
+		 * [GRAMMAR]
+		 * updateStatement:
+		 *   withClause? UPDATE_SYMBOL LOW_PRIORITY_SYMBOL? IGNORE_SYMBOL? tableReferenceList
+		 *     SET_SYMBOL updateList whereClause? orderClause? simpleLimitClause?
+		 */
 
-			// When using a subquery, skip WHERE, ORDER BY, and LIMIT.
-			if (
-				null !== $where_subquery
-				&& $child instanceof WP_Parser_Node
-				&& 'updateList' === $child->rule_name
-			) {
-				// We can stop here, as the update statement grammar is:
-				//   ... updateList whereClause? orderClause? simpleLimitClause?
-				break;
+		// Collect all tables used in the UPDATE clause (e.g, UPDATE t1, t2 JOIN t3).
+		$table_alias_map = $this->create_table_reference_map(
+			$node->get_first_child_node( 'tableReferenceList' )
+		);
+
+		// Determine whether the UPDATE statement modifies multiple tables.
+		$update_list_node        = $node->get_first_child_node( 'updateList' );
+		$update_target           = null;
+		$updates_multiple_tables = false;
+		if ( count( $table_alias_map ) > 1 ) {
+			foreach ( $update_list_node->get_child_nodes( 'updateElement' ) as $update_element ) {
+				$column_ref       = $update_element->get_first_child_node( 'columnRef' );
+				$column_ref_parts = $column_ref->get_descendant_nodes( 'identifier' );
+				$table_or_alias   = count( $column_ref_parts ) > 1
+					? $this->unquote_sqlite_identifier( $this->translate( $column_ref_parts[0] ) )
+					: null;
+
+				// When the SET column reference is not qualified, we need to
+				// verify whether the column is used in multiple tables.
+				if ( null === $table_or_alias ) {
+					$persistent_table_names = array();
+					$temporary_table_names  = array();
+					foreach ( array_filter( array_column( $table_alias_map, 'table_name' ) ) as $table_name ) {
+						$is_temporary      = $this->information_schema_builder->temporary_table_exists( $table_name );
+						$quoted_table_name = $this->connection->quote( $table_name );
+						if ( $is_temporary ) {
+							$temporary_table_names[] = $quoted_table_name;
+						} else {
+							$persistent_table_names[] = $quoted_table_name;
+						}
+					}
+
+					$column_name = $this->unquote_sqlite_identifier(
+						$this->translate( end( $column_ref_parts ) )
+					);
+
+					$matched_temporary_tables = array();
+					if ( count( $temporary_table_names ) > 0 ) {
+						$matched_temporary_tables = $this->execute_sqlite_query(
+							sprintf(
+								'SELECT table_name FROM %s WHERE table_schema = ? AND table_name IN ( %s ) AND column_name = ?',
+								$this->quote_sqlite_identifier(
+									$this->information_schema_builder->get_table_name( true, 'columns' )
+								),
+								implode( ', ', $temporary_table_names )
+							),
+							array( $this->get_saved_db_name(), $column_name )
+						)->fetchAll( PDO::FETCH_COLUMN );
+					}
+
+					$matched_persistent_tables = array();
+					if ( count( $persistent_table_names ) > 0 ) {
+						$matched_persistent_tables = $this->execute_sqlite_query(
+							sprintf(
+								'SELECT table_name FROM %s WHERE table_schema = ? AND table_name IN ( %s ) AND column_name = ?',
+								$this->quote_sqlite_identifier(
+									$this->information_schema_builder->get_table_name( false, 'columns' )
+								),
+								implode( ', ', $persistent_table_names )
+							),
+							array( $this->get_saved_db_name(), $column_name )
+						)->fetchAll( PDO::FETCH_COLUMN );
+					}
+
+					$matched_tables          = array_merge( $matched_temporary_tables, $matched_persistent_tables );
+					$updates_multiple_tables = count( $matched_tables ) > 1;
+					if ( 1 === count( $matched_tables ) ) {
+						$table_or_alias = $matched_tables[0];
+					} else {
+						break;
+					}
+				}
+
+				if ( null === $update_target ) {
+					$update_target = $table_or_alias;
+				}
+
+				if ( $update_target !== $table_or_alias ) {
+					$updates_multiple_tables = true;
+					break;
+				}
 			}
+		} else {
+			$update_target = array_keys( $table_alias_map )[0];
 		}
 
-		// Compose the update query.
-		$query = implode( ' ', $parts );
-		if ( null !== $where_subquery ) {
-			$query .= ' WHERE rowid IN ( ' . $where_subquery . ' )';
+		// TODO: Support UPDATE that modifies multiple tables.
+		//       This is non-trivial and likely requires temporary tables.
+		//       E.g.: UPDATE t1, t2 SET t1.id = t2.id, t2.id = t1.id;
+		if ( $updates_multiple_tables ) {
+			throw $this->new_not_supported_exception( 'UPDATE statement modifying multiple tables' );
 		}
+
+		// Translate WITH clause.
+		$with = $this->translate( $node->get_first_child_node( 'withClause' ) );
+
+		// Translate "UPDATE IGNORE" to "UPDATE OR IGNORE".
+		$or_ignore = $node->has_child_token( WP_MySQL_Lexer::IGNORE_SYMBOL )
+			? 'OR IGNORE'
+			: null;
+
+		// Compose the update target clause.
+		$update_target_table  = $table_alias_map[ $update_target ]['table_name'] ?? $update_target;
+		$update_target_clause = $this->quote_sqlite_identifier( $update_target_table );
+		if ( $update_target !== $update_target_table ) {
+			$update_target_clause .= ' AS ' . $this->quote_sqlite_identifier( $update_target );
+		}
+
+		// Compose the FROM clause using all tables except the one being updated.
+		// UPDATE with FROM in SQLite is equivalent to UPDATE with JOIN in MySQL.
+		$from_items = array();
+		foreach ( $table_alias_map as $alias => $data ) {
+			if ( $alias === $update_target ) {
+				continue;
+			}
+
+			$table_name = $data['table_name'];
+
+			// Derived table.
+			if ( null === $table_name ) {
+				$from_item    = $data['table_expr'] . ' AS ' . $this->quote_sqlite_identifier( $alias );
+				$from_items[] = $from_item;
+				continue;
+			}
+
+			// Regular table.
+			$from_item = $this->quote_sqlite_identifier( $table_name );
+			if ( $alias !== $table_name ) {
+				$from_item .= ' AS ' . $this->quote_sqlite_identifier( $alias );
+			}
+			$from_items[] = $from_item;
+		}
+
+		$from = null;
+		if ( count( $from_items ) > 0 ) {
+			$from = 'FROM ' . implode( ', ', $from_items );
+		}
+
+		// Translate UPDATE list.
+		if ( $is_non_strict_mode ) {
+			$update_list = $this->translate_update_list_in_non_strict_mode( $update_target, $update_list_node );
+		} else {
+			$update_parts = array();
+			foreach ( $update_list_node->get_child_nodes() as $update_element ) {
+				$column_ref       = $update_element->get_first_child_node( 'columnRef' );
+				$column_ref_parts = $column_ref->get_descendant_nodes( 'identifier' );
+
+				$update_part    = $this->translate( end( $column_ref_parts ) );
+				$update_part   .= ' = ';
+				$update_part   .= $this->translate( $update_element->get_first_child_node( 'expr' ) );
+				$update_parts[] = $update_part;
+			}
+			$update_list = implode( ', ', $update_parts );
+		}
+
+		// Translate WHERE, ORDER BY, and LIMIT clauses.
+		if ( $where_subquery ) {
+			// When using a subquery, skip the original WHERE, ORDER BY, and LIMIT.
+			$where_clause = ' WHERE rowid IN ( ' . $where_subquery . ' )';
+			$order_clause = null;
+			$limit_clause = null;
+		} else {
+			$where_clause = $this->translate( $node->get_first_child_node( 'whereClause' ) );
+			$order_clause = $this->translate( $node->get_first_child_node( 'orderClause' ) );
+			$limit_clause = $this->translate( $node->get_first_child_node( 'simpleLimitClause' ) );
+		}
+
+		// With JOINs, we need to use the JOIN expressions in the WHERE clause.
+		$join_exprs = array_filter( array_column( $table_alias_map, 'join_expr' ) );
+		if ( count( $join_exprs ) > 0 ) {
+			$where_clause .= $where_clause ? ' AND ' : ' WHERE ';
+			$where_clause .= implode( ' AND ', $join_exprs );
+		}
+
+		// Compose the UPDATE query.
+		$parts = array(
+			$with,
+			'UPDATE',
+			$or_ignore,
+			$update_target_clause,
+			'SET',
+			$update_list,
+			$from,
+			$where_clause,
+			$order_clause,
+			$limit_clause,
+		);
+		$query = implode( ' ', array_filter( $parts ) );
 
 		$this->execute_sqlite_query( $query );
 		$this->set_result_from_affected_rows();
@@ -1451,7 +1947,7 @@ class WP_SQLite_Driver {
 					'SELECT 1 FROM %s WHERE table_schema = ? AND table_name = ?',
 					$this->quote_sqlite_identifier( $tables_table )
 				),
-				array( $this->db_name, $table_name )
+				array( $this->get_saved_db_name(), $table_name )
 			)->fetchColumn();
 
 			if ( $table_exists ) {
@@ -1498,7 +1994,7 @@ class WP_SQLite_Driver {
 				FROM %s WHERE table_schema = ? AND table_name = ?',
 				$this->quote_sqlite_identifier( $columns_table )
 			),
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetchAll( PDO::FETCH_ASSOC );
 
 		// Track column renames and removals.
@@ -1726,6 +2222,9 @@ class WP_SQLite_Driver {
 		$keyword2 = $tokens[2] ?? null;
 
 		switch ( $keyword1->id ) {
+			case WP_MySQL_Lexer::COLLATION_SYMBOL:
+				$this->execute_show_collation_statement();
+				return;
 			case WP_MySQL_Lexer::DATABASES_SYMBOL:
 				$this->execute_show_databases_statement( $node );
 				return;
@@ -1794,6 +2293,32 @@ class WP_SQLite_Driver {
 	}
 
 	/**
+	 * Translate and execute a MySQL SHOW COLLATION statement in SQLite.
+	 */
+	private function execute_show_collation_statement(): void {
+		$definition = $this->information_schema_builder
+			->get_computed_information_schema_table_definition( 'collations' );
+
+		// TODO: LIKE and WHERE clauses.
+
+		$result = $this->execute_sqlite_query( $definition )->fetchAll( PDO::FETCH_ASSOC );
+
+		$collations = array();
+		foreach ( $result as $row ) {
+			$collations[] = (object) array(
+				'Collation'     => $row['COLLATION_NAME'],
+				'Charset'       => $row['CHARACTER_SET_NAME'],
+				'Id'            => $row['ID'],
+				'Default'       => $row['IS_DEFAULT'],
+				'Compiled'      => $row['IS_COMPILED'],
+				'Sortlen'       => $row['SORTLEN'],
+				'Pad_attribute' => $row['PAD_ATTRIBUTE'],
+			);
+		}
+		$this->set_results_from_fetched_data( $collations );
+	}
+
+	/**
 	 * Translate and execute a MySQL SHOW DATABASES statement in SQLite.
 	 *
 	 * @param  WP_Parser_Node $node The "showStatement" AST node.
@@ -1809,9 +2334,16 @@ class WP_SQLite_Driver {
 
 		$databases = $this->execute_sqlite_query(
 			sprintf(
-				'SELECT SCHEMA_NAME AS Database FROM %s%s ORDER BY SCHEMA_NAME',
+				'SELECT SCHEMA_NAME AS Database
+				FROM (
+					SELECT IIF(SCHEMA_NAME = ?, ?, SCHEMA_NAME) AS SCHEMA_NAME FROM %s ORDER BY SCHEMA_NAME
+				)%s',
 				$this->quote_sqlite_identifier( $schemata_table ),
 				isset( $condition ) ? ( ' WHERE TRUE ' . $condition ) : ''
+			),
+			array(
+				$this->get_saved_db_name(),
+				$this->main_db_name,
 			)
 		)->fetchAll( PDO::FETCH_OBJ );
 
@@ -1878,7 +2410,7 @@ class WP_SQLite_Driver {
 					ROWID,
 					SEQ_IN_INDEX
 			",
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetchAll( PDO::FETCH_OBJ );
 
 		$this->set_results_from_fetched_data( $index_info );
@@ -1918,7 +2450,7 @@ class WP_SQLite_Driver {
 				$this->quote_sqlite_identifier( $tables_tables ),
 				$condition ?? ''
 			),
-			array( $database )
+			array( $this->get_saved_db_name( $database ) )
 		)->fetchAll( PDO::FETCH_ASSOC );
 
 		if ( false === $table_info ) {
@@ -1987,7 +2519,7 @@ class WP_SQLite_Driver {
 				$this->quote_sqlite_identifier( $table_tables ),
 				$condition ?? ''
 			),
-			array( $database )
+			array( $this->get_saved_db_name( $database ) )
 		)->fetchAll( PDO::FETCH_ASSOC );
 
 		if ( false === $table_info ) {
@@ -2045,7 +2577,7 @@ class WP_SQLite_Driver {
 				'SELECT 1 FROM %s WHERE table_schema = ? AND table_name = ?',
 				$this->quote_sqlite_identifier( $tables_tables )
 			),
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name( $database ), $table_name )
 		)->fetchColumn();
 
 		if ( ! $table_exists ) {
@@ -2069,7 +2601,7 @@ class WP_SQLite_Driver {
 				$this->quote_sqlite_identifier( $columns_table ),
 				$condition ?? ''
 			),
-			array( $database, $table_name )
+			array( $this->get_saved_db_name( $database ), $table_name )
 		)->fetchAll( PDO::FETCH_ASSOC );
 
 		if ( false === $column_info ) {
@@ -2121,7 +2653,7 @@ class WP_SQLite_Driver {
 				AND table_name = ?
 				ORDER BY ordinal_position
 			',
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetchAll( PDO::FETCH_OBJ );
 
 		$this->set_results_from_fetched_data( $column_info );
@@ -2140,7 +2672,7 @@ class WP_SQLite_Driver {
 
 		if ( 'information_schema' === strtolower( $database_name ) ) {
 			$this->db_name = 'information_schema';
-		} elseif ( $this->db_name === $database_name ) {
+		} elseif ( $this->main_db_name === $database_name ) {
 			$this->db_name = $database_name;
 		} else {
 			throw $this->new_not_supported_exception(
@@ -2512,22 +3044,12 @@ class WP_SQLite_Driver {
 
 		$rule_name = $node->rule_name;
 		switch ( $rule_name ) {
+			case 'queryExpression':
+				return $this->translate_query_expression( $node );
 			case 'querySpecification':
-				// Translate "HAVING ..." without "GROUP BY ..." to "GROUP BY 1 HAVING ...".
-				if ( $node->has_child_node( 'havingClause' ) && ! $node->has_child_node( 'groupByClause' ) ) {
-					$parts = array();
-					foreach ( $node->get_children() as $child ) {
-						if ( $child instanceof WP_Parser_Node && 'havingClause' === $child->rule_name ) {
-							$parts[] = 'GROUP BY 1';
-						}
-						$part = $this->translate( $child );
-						if ( null !== $part ) {
-							$parts[] = $part;
-						}
-					}
-					return implode( ' ', $parts );
-				}
-				return $this->translate_sequence( $node->get_children() );
+				return $this->translate_query_specification( $node );
+			case 'tableRef':
+				return $this->translate_table_ref( $node );
 			case 'qualifiedIdentifier':
 			case 'tableRefWithWildcard':
 				$parts = $node->get_descendant_nodes( 'identifier' );
@@ -2646,6 +3168,16 @@ class WP_SQLite_Driver {
 				$type = $type_token ? $type_token->id : WP_MySQL_Lexer::SESSION_SYMBOL;
 				if ( 'sql_mode' === $name ) {
 					$value = implode( ',', $this->active_sql_modes );
+				} elseif ( 'version' === $name ) {
+					$version = (string) $this->mysql_version;
+					$value   = sprintf(
+						'%d.%d.%d',
+						$version[0],
+						substr( $version, 1, 2 ),
+						substr( $version, 3, 2 )
+					);
+				} elseif ( 'version_comment' === $name ) {
+					$value = 'MySQL Community Server - GPL';
 				} elseif ( WP_MySQL_Lexer::SESSION_SYMBOL === $type ) {
 					$value = $this->session_system_variables[ $name ] ?? null;
 				} else {
@@ -2675,11 +3207,36 @@ class WP_SQLite_Driver {
 				}
 				return (string) $value;
 			case 'castType':
-				// Translate "CAST(... AS BINARY)" to "CAST(... AS BLOB)".
-				if ( $node->has_child_token( WP_MySQL_Lexer::BINARY_SYMBOL ) ) {
-					return 'BLOB';
+				$first_child = $node->get_first_child();
+				if ( $first_child instanceof WP_Parser_Node ) {
+					$first_token = $first_child->get_first_child_token();
+				} else {
+					$first_token = $first_child;
 				}
-				return $this->translate_sequence( $node->get_children() );
+				switch ( $first_token->id ) {
+					case WP_MySQL_Lexer::BINARY_SYMBOL:
+						return 'BLOB';
+					case WP_MySQL_Lexer::CHAR_SYMBOL:
+					case WP_MySQL_Lexer::NCHAR_SYMBOL:
+					case WP_MySQL_Lexer::NATIONAL_SYMBOL:
+					case WP_MySQL_Lexer::DATE_SYMBOL:
+					case WP_MySQL_Lexer::TIME_SYMBOL:
+					case WP_MySQL_Lexer::DATETIME_SYMBOL:
+					case WP_MySQL_Lexer::JSON_SYMBOL:
+						return 'TEXT';
+					case WP_MySQL_Lexer::SIGNED_SYMBOL:
+					case WP_MySQL_Lexer::UNSIGNED_SYMBOL:
+						return 'INTEGER';
+					case WP_MySQL_Lexer::DECIMAL_SYMBOL:
+					case WP_MySQL_Lexer::FLOAT_SYMBOL:
+					case WP_MySQL_Lexer::REAL_SYMBOL:
+					case WP_MySQL_Lexer::DOUBLE_SYMBOL:
+						return 'REAL';
+					default:
+						throw $this->new_not_supported_exception(
+							sprintf( 'cast type: %s', $first_child->get_value() )
+						);
+				}
 			case 'defaultCollation':
 				// @TODO: Check and save in information schema.
 				return null;
@@ -2690,6 +3247,10 @@ class WP_SQLite_Driver {
 				return 'AS ' . $this->translate( $node->get_first_child_node() );
 			case 'indexHint':
 			case 'indexHintList':
+				return null;
+			case 'lockingClause':
+				// SQLite doesn't support locking clauses (SELECT ... FOR UPDATE).
+				// They are not needed in SQLite due to the database file locking.
 				return null;
 			default:
 				return $this->translate_sequence( $node->get_children() );
@@ -2706,6 +3267,42 @@ class WP_SQLite_Driver {
 		switch ( $token->id ) {
 			case WP_MySQL_Lexer::EOF:
 				return null;
+			case WP_MySQL_Lexer::BIN_NUMBER:
+				/*
+				 * There are no binary literals in SQLite. We need to convert all
+				 * MySQL binary string values to HEX strings in SQLite (x'...').
+				 */
+				$value = $token->get_value();
+				if ( '0' === $value[0] ) {
+					// 0b...
+					$value = substr( $value, 2 );
+				} else {
+					// b'...' or B'...'
+					$value = substr( $value, 2, -1 );
+				}
+
+				// Convert the binary string to HEX.
+				$hex = base_convert( $value, 2, 16 );
+
+				/*
+				 * The "base_convert()" function doesn't add or preserve padding.
+				 * Let's compute how many bytes we expect and pad the HEX value
+				 * to full bytes (SQLite requires HEX strings of even length).
+				 */
+				$byte_count = (int) ceil( strlen( $value ) / 8 );
+				$hex        = str_pad( $hex, $byte_count * 2, '0', STR_PAD_LEFT );
+				return sprintf( "x'%s'", $hex );
+			case WP_MySQL_Lexer::HEX_NUMBER:
+				/*
+				 * In MySQL, "0x" prefixed values represent binary literal values,
+				 * while in SQLite, that would be a hexadecimal number. Therefore,
+				 * we need to convert the 0x... syntax to x'...'.
+				 */
+				$value = $token->get_value();
+				if ( '0' === $value[0] && 'x' === $value[1] ) {
+					return sprintf( "x'%s'", substr( $value, 2 ) );
+				}
+				return $value;
 			case WP_MySQL_Lexer::AUTO_INCREMENT_SYMBOL:
 				return 'AUTOINCREMENT';
 			case WP_MySQL_Lexer::BINARY_SYMBOL:
@@ -2764,7 +3361,7 @@ class WP_SQLite_Driver {
 		$value = $token->get_value();
 
 		/*
-		 * 5. Translate datetime literals.
+		 * Translate datetime literals.
 		 *
 		 * Process only strings that could possibly represent a datetime
 		 * literal ("YYYY-MM-DDTHH:MM:SS", "YYYY-MM-DDTHH:MM:SSZ", etc.).
@@ -2774,7 +3371,7 @@ class WP_SQLite_Driver {
 		}
 
 		/*
-		 * 6. Handle null characters.
+		 * Handle null characters.
 		 *
 		 * SQLite doesn't fully support null characters (\u0000) in strings.
 		 * However, it can store them and read them, with some limitations.
@@ -2783,25 +3380,26 @@ class WP_SQLite_Driver {
 		 * Removing them would damage the serialized data.
 		 *
 		 * There is no way to store null bytes using a string literal, so we
-		 * need to split the string and concatenate null bytes with its parts.
+		 * need to pass the value as a HEX string and cast it back to TEXT.
 		 * This will convert literals will null bytes to expressions.
 		 *
 		 * Alternatively, we could replace string literals with parameters and
 		 * pass them using prepared statements. However, that's not universally
 		 * applicable for all string literals (e.g., in default column values).
 		 *
+		 * We can't use the "part1 || CHAR(0) || part2 || ..." syntax, because
+		 * with a large number of null bytes, SQLite throws the following error:
+		 *
+		 *   SQLSTATE[HY000]:
+		 *   General error: 1 Expression tree is too large (maximum depth 1000)
+		 *
 		 * See:
 		 *   https://www.sqlite.org/nulinstr.html
 		 */
-		$parts = array();
-		foreach ( explode( "\0", $value ) as $segment ) {
-			// Escape and quote each segment.
-			$parts[] = "'" . str_replace( "'", "''", $segment ) . "'";
+		if ( strpos( $value, "\0" ) !== false ) {
+			return sprintf( "CAST(x'%s' AS TEXT)", bin2hex( $value ) );
 		}
-		if ( count( $parts ) > 1 ) {
-			return '(' . implode( ' || CHAR(0) || ', $parts ) . ')';
-		}
-		return $parts[0];
+		return $this->connection->quote( $value );
 	}
 
 	/**
@@ -2854,7 +3452,7 @@ class WP_SQLite_Driver {
 			);
 			if ( 'information_schema' === strtolower( $schema_name ) ) {
 				$is_information_schema = true;
-			} elseif ( $this->db_name === $schema_name ) {
+			} elseif ( $this->main_db_name === $schema_name ) {
 				$is_information_schema = false;
 			} else {
 				throw $this->new_not_supported_exception(
@@ -2887,14 +3485,7 @@ class WP_SQLite_Driver {
 
 		// Database-level object name (table, view, procedure, trigger, etc.).
 		if ( null !== $object_node ) {
-			if ( $is_information_schema ) {
-				$object_name = $this->unquote_sqlite_identifier(
-					$this->translate_sequence( $object_node->get_children() )
-				);
-				$parts[]     = $this->information_schema_builder->get_table_name( false, $object_name );
-			} else {
-				$parts[] = $this->translate( $object_node );
-			}
+			$parts[] = $this->translate( $object_node );
 		}
 
 		// Object child name (column, index, etc.).
@@ -2903,6 +3494,167 @@ class WP_SQLite_Driver {
 		}
 
 		return implode( '.', $parts );
+	}
+
+	/**
+	 * Translate a MySQL query expression to SQLite.
+	 *
+	 * @param  WP_Parser_Node $node       The "queryExpression" AST node.
+	 * @return string                     The translated value.
+	 * @throws WP_SQLite_Driver_Exception When the translation fails.
+	 */
+	private function translate_query_expression( WP_Parser_Node $node ): string {
+		// Get the query expression subnode under which we need to look for the
+		// SELECT item list node. This prevents searching under "withClause".
+		$query_expr_main = (
+			$node->get_first_child_node( 'queryExpressionBody' )
+			?? $node->get_first_child_node( 'queryExpressionParens' )
+		);
+		$query_term      = $query_expr_main->get_first_descendant_node( 'queryTerm' );
+		$has_union       = $query_expr_main->has_child_token( WP_MySQL_Lexer::UNION_SYMBOL );
+		$has_except      = $query_expr_main->has_child_token( WP_MySQL_Lexer::EXCEPT_SYMBOL );
+		$has_intersect   = $query_term->has_child_token( WP_MySQL_Lexer::INTERSECT_SYMBOL );
+
+		/*
+		 * When the ORDER BY clause is present, we need to disambiguate the item
+		 * list and make sure they don't cause an "ambiguous column name" error.
+		 *
+		 * @see WP_SQLite_Driver::disambiguate_item()
+		 */
+		$disambiguated_order_list = array();
+		$order_clause             = $node->get_first_child_node( 'orderClause' );
+		if ( $order_clause && ! $has_union && ! $has_except && ! $has_intersect ) {
+			/*
+			 * [GRAMMAR]
+			 * queryExpression: (withClause)? (
+			 *   queryExpressionBody orderClause? limitClause?
+			 *   | queryExpressionParens orderClause? limitClause?
+			 * ) (procedureAnalyseClause)?
+			 */
+
+			// Create the SELECT item disambiguation map.
+			$select_item_list   = $query_expr_main->get_first_descendant_node( 'selectItemList' );
+			$disambiguation_map = $this->create_select_item_disambiguation_map( $select_item_list );
+
+			// For each "orderList" item, search for a matching SELECT item.
+			$disambiguated_order_list = array();
+			$order_list               = $order_clause->get_first_child_node( 'orderList' );
+			foreach ( $order_list->get_child_nodes() as $order_item ) {
+				/*
+				 * [GRAMMAR]
+				 * orderExpression: expr direction?
+				 */
+				$order_expr         = $order_item->get_first_child_node( 'expr' );
+				$order_direction    = $order_item->get_first_child_node( 'direction' );
+				$disambiguated_item = $this->disambiguate_item( $disambiguation_map, $order_expr );
+
+				$disambiguated_order_list[] = sprintf(
+					'%s%s',
+					$disambiguated_item ?? $this->translate( $order_expr ),
+					null !== $order_direction ? ( ' ' . $this->translate( $order_direction ) ) : ''
+				);
+			}
+
+			// Translate the query expression, replacing the ORDER BY list with
+			// the one that was constructed using the disambiguation algorithm.
+			$parts = array();
+			foreach ( $node->get_children() as $child ) {
+				if ( $child instanceof WP_Parser_Node && 'orderClause' === $child->rule_name ) {
+					$parts[] = 'ORDER BY ' . implode( ', ', $disambiguated_order_list );
+				} else {
+					$parts[] = $this->translate( $child );
+				}
+			}
+			return implode( ' ', $parts );
+		}
+
+		return $this->translate_sequence( $node->get_children() );
+	}
+
+	/**
+	 * Translate a MySQL query specification node to SQLite.
+	 *
+	 * @param  WP_Parser_Node $node       The "querySpecification" AST node.
+	 * @return string                     The translated value.
+	 * @throws WP_SQLite_Driver_Exception When the translation fails.
+	 * @return string|null
+	 */
+	private function translate_query_specification( WP_Parser_Node $node ): string {
+		$group_by = $node->get_first_child_node( 'groupByClause' );
+		$having   = $node->get_first_child_node( 'havingClause' );
+
+		/*
+		 * When the GROUP BY or HAVING clause is present, we need to disambiguate
+		 * the items to ensure they don't cause an "ambiguous column name" error.
+		 *
+		 * @see WP_SQLite_Driver::disambiguate_item()
+		 */
+		$group_by_clause = null;
+		$having_clause   = null;
+		if ( $group_by || $having ) {
+			// Build a SELECT list disambiguation map for both GROUP BY and HAVING.
+			$select_item_list   = $node->get_first_child_node( 'selectItemList' );
+			$disambiguation_map = $this->create_select_item_disambiguation_map( $select_item_list );
+
+			// Disambiguate the GROUP BY clause column references.
+			$disambiguated_group_by_list = array();
+			if ( $group_by ) {
+				/*
+				 * [GRAMMAR]
+				 * groupByClause: GROUP_SYMBOL BY_SYMBOL orderList olapOption?
+				 */
+				$group_by_list = $group_by->get_first_child_node( 'orderList' );
+				foreach ( $group_by_list->get_child_nodes() as $group_by_item ) {
+					$group_by_expr                 = $group_by_item->get_first_child_node( 'expr' );
+					$disambiguated_item            = $this->disambiguate_item( $disambiguation_map, $group_by_expr );
+					$disambiguated_group_by_list[] = $disambiguated_item ?? $this->translate( $group_by_expr );
+				}
+				$group_by_clause = 'GROUP BY ' . implode( ', ', $disambiguated_group_by_list );
+			}
+
+			// Disambiguate the HAVING clause column references.
+			$disambiguated_having_list = array();
+			if ( $having ) {
+				/*
+				 * [GRAMMAR]
+				 * havingClause: HAVING_SYMBOL expr
+				 */
+				$having_expr          = $having->get_first_child_node();
+				$having_expr_children = $having_expr->get_children();
+				foreach ( $having_expr_children as $having_item ) {
+					if ( $having_item instanceof WP_Parser_Node ) {
+						$disambiguated_item          = $this->disambiguate_item( $disambiguation_map, $having_item );
+						$disambiguated_having_list[] = $disambiguated_item ?? $this->translate( $having_item );
+					} else {
+						$disambiguated_having_list[] = $this->translate( $having_item );
+					}
+				}
+				$having_clause = 'HAVING ' . implode( ' ', $disambiguated_having_list );
+			}
+
+			// Translate the query specification, replacing the ORDER BY/HAVING
+			// items with the ones that were disambiguated using the SELECT list.
+			$parts = array();
+			foreach ( $node->get_children() as $child ) {
+				if ( $child instanceof WP_Parser_Node && 'groupByClause' === $child->rule_name ) {
+					$parts[] = $group_by_clause;
+				} elseif ( $child instanceof WP_Parser_Node && 'havingClause' === $child->rule_name ) {
+					// SQLite doesn't allow using the "HAVING" clause without "GROUP BY".
+					// In such cases, let's prefix the "HAVING" clause with "GROUP BY 1".
+					if ( ! $group_by ) {
+						$parts[] = 'GROUP BY 1';
+					}
+					$parts[] = $having_clause;
+				} else {
+					$part = $this->translate( $child );
+					if ( null !== $part ) {
+						$parts[] = $part;
+					}
+				}
+			}
+			return implode( ' ', $parts );
+		}
+		return $this->translate_sequence( $node->get_children() );
 	}
 
 	/**
@@ -3014,6 +3766,8 @@ class WP_SQLite_Driver {
 		}
 
 		switch ( $child->id ) {
+			case WP_MySQL_Lexer::DATABASE_SYMBOL:
+				return $this->connection->quote( $this->db_name );
 			case WP_MySQL_Lexer::CURRENT_TIMESTAMP_SYMBOL:
 			case WP_MySQL_Lexer::NOW_SYMBOL:
 				/*
@@ -3260,6 +4014,115 @@ class WP_SQLite_Driver {
 	}
 
 	/**
+	 * Translate a MySQL table reference to SQLite.
+	 *
+	 * When the table reference targets an information schema table, we replace
+	 * it with a subquery, injecting the configured database name dynamically.
+	 *
+	 * For example, the following query:
+	 *
+	 *   SELECT *, t.*, t.table_schema FROM information_schema.tables t
+	 *
+	 * Will be translated to:
+	 *
+	 *   SELECT *, `t`.*, `t`.`table_schema` FROM (
+	 *     SELECT
+	 *       `TABLE_CATALOG`,
+	 *       IIF(`TABLE_SCHEMA` = 'information_schema', `TABLE_SCHEMA`, 'database_name') AS `TABLE_SCHEMA`,
+	 *       `TABLE_NAME`,
+	 *       ...
+	 *     FROM `_wp_sqlite_mysql_information_schema_tables` AS `tables`
+	 *   ) `t`
+	 *
+	 * The same logic will be applied to table references in JOIN clauses as well.
+	 *
+	 * @param  WP_Parser_Node $node       The "tableRef" AST node.
+	 * @return string                     The translated value.
+	 * @throws WP_SQLite_Driver_Exception When the translation fails.
+	 */
+	public function translate_table_ref( WP_Parser_Node $node ): string {
+		// Information schema is currently accessible only in read-only queries.
+		if ( ! $this->is_readonly ) {
+			return $this->translate_sequence( $node->get_children() );
+		}
+
+		// The table reference is in "<schema>.<table>" or "<table>" format.
+		$parts  = $node->get_descendant_nodes( 'identifier' );
+		$table  = array_pop( $parts );
+		$schema = array_pop( $parts );
+
+		$schema_name = $schema ? $this->unquote_sqlite_identifier( $this->translate( $schema ) ) : null;
+		$table_name  = $this->unquote_sqlite_identifier( $this->translate( $table ) );
+
+		// When the table reference targets an information schema table,
+		// we need to inject the configured database name dynamically.
+		if (
+			( null === $schema_name && 'information_schema' === $this->db_name )
+			|| ( null !== $schema_name && 'information_schema' === strtolower( $schema_name ) )
+		) {
+			$table_name = strtolower( $table_name );
+
+			// Some information schema tables can be computed on the fly.
+			if ( 'character_sets' === $table_name || 'collations' === $table_name ) {
+				$table_definition = $this->information_schema_builder
+					->get_computed_information_schema_table_definition( $table_name );
+				if ( null !== $table_definition ) {
+					return sprintf( '(%s)', $table_definition );
+				}
+			}
+
+			$table_is_temporary = $this->information_schema_builder->temporary_table_exists( $table_name );
+			$sqlite_table_name  = $this->information_schema_builder->get_table_name( $table_is_temporary, $table_name );
+
+			// We need to fetch the SQLite column information, because the information
+			// schema tables don't contain records for the information schema itself.
+			$columns = $this->execute_sqlite_query(
+				'SELECT name FROM pragma_table_info(?)',
+				array( $sqlite_table_name )
+			)->fetchAll( PDO::FETCH_COLUMN );
+
+			// List all columns in the table, replacing columns targeting database
+			// name columns with the configured database name.
+			static $information_schema_db_column_map = array(
+				'SCHEMA_NAME'              => true,
+				'TABLE_SCHEMA'             => true,
+				'VIEW_SCHEMA'              => true,
+				'INDEX_SCHEMA'             => true,
+				'CONSTRAINT_SCHEMA'        => true,
+				'UNIQUE_CONSTRAINT_SCHEMA' => true,
+				'REFERENCED_TABLE_SCHEMA'  => true,
+				'TRIGGER_SCHEMA'           => true,
+			);
+
+			$expanded_list = array();
+			foreach ( $columns as $column ) {
+				$quoted_column = $this->quote_sqlite_identifier( $column );
+				if ( isset( $information_schema_db_column_map[ strtoupper( $column ) ] ) ) {
+					$expanded_list[] = sprintf(
+						"IIF(%s = 'information_schema', %s, %s) AS %s",
+						$quoted_column,
+						$quoted_column,
+						$this->connection->quote( $this->main_db_name ),
+						strtoupper( $quoted_column )
+					);
+				} else {
+					$expanded_list[] = $quoted_column;
+				}
+			}
+			$column_list = implode( ', ', $expanded_list );
+
+			// Compose information schema subquery.
+			return sprintf(
+				'(SELECT %s FROM %s AS %s)',
+				$column_list,
+				$this->quote_sqlite_identifier( $sqlite_table_name ),
+				$this->quote_sqlite_identifier( $table_name )
+			);
+		}
+		return $this->translate_sequence( $node->get_children() );
+	}
+
+	/**
 	 * Recreate an existing table using data in the information schema.
 	 *
 	 * This is used for a generic support of ALTER TABLE queries, as well as
@@ -3287,7 +4150,7 @@ class WP_SQLite_Driver {
 					'SELECT COLUMN_NAME FROM %s WHERE table_schema = ? AND table_name = ?',
 					$this->quote_sqlite_identifier( $columns_table )
 				),
-				array( $this->db_name, $table_name )
+				array( $this->get_saved_db_name(), $table_name )
 			)->fetchAll( PDO::FETCH_COLUMN );
 			$column_map    = array_combine( $column_names, $column_names );
 		}
@@ -3453,7 +4316,7 @@ class WP_SQLite_Driver {
 				AND table_name = ?
 				ORDER BY ordinal_position
 			',
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetchAll( PDO::FETCH_ASSOC );
 
 		// 2. Get the list of fields explicitly defined in the INSERT statement.
@@ -3463,6 +4326,12 @@ class WP_SQLite_Driver {
 			// This is the optional "INSERT INTO ... (field1, field2, ...)" list.
 			foreach ( $fields_node->get_child_nodes() as $field ) {
 				$insert_list[] = $this->unquote_sqlite_identifier( $this->translate( $field ) );
+			}
+		} elseif ( 'updateList' === $node->rule_name ) {
+			// This is the "INSERT INTO ... SET c1 = v1, c2 = v2, ... " syntax.
+			foreach ( $node->get_child_nodes( 'updateElement' ) as $update_element ) {
+				$column_ref    = $update_element->get_first_child_node( 'columnRef' );
+				$insert_list[] = $this->unquote_sqlite_identifier( $this->translate( $column_ref ) );
 			}
 		} else {
 			// When no explicit field list is provided, all columns are required.
@@ -3544,10 +4413,25 @@ class WP_SQLite_Driver {
 			}
 		}
 
-		// 6. Wrap the original insert VALUES or SELECT expression in a FROM clause.
-		$values = 'insertFromConstructor' === $node->rule_name
-			? $node->get_first_child_node( 'insertValues' )
-			: $node->get_first_child_node( 'queryExpressionOrParens' );
+		// 6. Wrap the original insert VALUES, SELECT, or SET list in a FROM clause.
+		if ( 'insertFromConstructor' === $node->rule_name ) {
+			// VALUES (...)
+			$from = $this->translate(
+				$node->get_first_child_node( 'insertValues' )
+			);
+		} elseif ( 'insertQueryExpression' === $node->rule_name ) {
+			// SELECT ...
+			$from = $this->translate(
+				$node->get_first_child_node( 'queryExpressionOrParens' )
+			);
+		} else {
+			// SET c1 = v1, c2 = v2, ...
+			$values = array();
+			foreach ( $node->get_child_nodes( 'updateElement' ) as $update_element ) {
+				$values[] = $this->translate( $update_element->get_first_child_node( 'expr' ) );
+			}
+			$from = 'VALUES (' . implode( ', ', $values ) . ')';
+		}
 
 		/*
 		 * The "WHERE true" suffix is used to avoid parsing ambiguity in SQLite.
@@ -3556,7 +4440,7 @@ class WP_SQLite_Driver {
 		 *
 		 * See: https://www.sqlite.org/lang_insert.html
 		 */
-		$fragment .= ' FROM (' . $this->translate( $values ) . ') WHERE true';
+		$fragment .= ' FROM (' . $from . ') WHERE true';
 
 		return $fragment;
 	}
@@ -3590,18 +4474,19 @@ class WP_SQLite_Driver {
 				WHERE table_schema = ?
 				AND table_name = ?
 			',
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetchAll( PDO::FETCH_ASSOC );
 		$column_map    = array_combine( array_column( $columns, 'COLUMN_NAME' ), $columns );
 
 		// 2. Translate UPDATE list, emulating implicit defaults for NULLs values.
 		$fragment = '';
 		foreach ( $node->get_child_nodes() as $i => $update_element ) {
-			$column_ref = $update_element->get_first_child_node( 'columnRef' );
-			$expr       = $update_element->get_first_child_node( 'expr' );
+			$column_ref       = $update_element->get_first_child_node( 'columnRef' );
+			$column_ref_parts = $column_ref->get_descendant_nodes( 'identifier' );
+			$expr             = $update_element->get_first_child_node( 'expr' );
 
 			// Get column info.
-			$column_name = $this->unquote_sqlite_identifier( $this->translate( $column_ref ) );
+			$column_name = $this->unquote_sqlite_identifier( $this->translate( end( $column_ref_parts ) ) );
 			$column_info = $column_map[ strtolower( $column_name ) ];
 			$data_type   = $column_info['DATA_TYPE'];
 			$is_nullable = 'YES' === $column_info['IS_NULLABLE'];
@@ -3626,11 +4511,257 @@ class WP_SQLite_Driver {
 
 			// Compose the UPDATE list item.
 			$fragment .= $i > 0 ? ', ' : '';
-			$fragment .= $this->translate( $column_ref );
+			$fragment .= $this->translate( end( $column_ref_parts ) );
 			$fragment .= ' = ';
 			$fragment .= $value;
 		}
 		return $fragment;
+	}
+
+	/**
+	 * Unnest parenthesized MySQL expression node.
+	 *
+	 * In MySQL, extra parentheses around simple expressions are not considered.
+	 *
+	 * For example, the "SELECT (((id)))" clause is equivalent to "SELECT id".
+	 * This means that the "(((id)))" part will behave as a column name rather
+	 * than as an expression, and the resulting column name will be just "id".
+	 *
+	 * @param  WP_Parser_Node $node The expression AST node.
+	 * @return WP_Parser_Node       The unnested expression.
+	 */
+	private function unnest_parenthesized_expression( WP_Parser_Node $node ): WP_Parser_Node {
+		$children = $node->get_children();
+
+		// Descend the "expr -> boolPri -> predicate -> bitExpr -> simpleExpr" tree,
+		// when on each level we have only a single child node (expression nesting).
+		if (
+			1 === count( $children )
+			&& $children[0] instanceof WP_Parser_Node
+			&& in_array( $children[0]->rule_name, array( 'expr', 'boolPri', 'predicate', 'bitExpr', 'simpleExpr' ), true )
+		) {
+			$unnested = $this->unnest_parenthesized_expression( $children[0] );
+			return $unnested === $children[0] ? $node : $unnested;
+		}
+
+		// Unnest "OPEN_PAR_SYMBOL exprList CLOSE_PAR_SYMBOL" to "exprList".
+		if (
+			count( $children ) === 3
+			&& $children[0] instanceof WP_MySQL_Token && WP_MySQL_Lexer::OPEN_PAR_SYMBOL === $children[0]->id
+			&& $children[1] instanceof WP_Parser_Node && 'exprList' === $children[1]->rule_name
+			&& $children[2] instanceof WP_MySQL_Token && WP_MySQL_Lexer::CLOSE_PAR_SYMBOL === $children[2]->id
+			&& 1 === count( $children[1]->get_children() )
+		) {
+			return $this->unnest_parenthesized_expression( $children[1] );
+		}
+
+		return $node;
+	}
+
+	/**
+	 * Disambiguate and translate an expression with a simple or parenthesized
+	 * column reference for use within an ORDER BY, GROUP BY, or HAVING clause.
+	 *
+	 * In SQLite, columns that exist in multiple tables used within a query must
+	 * be fully qualified when used in the ORDER BY, GROUP BY, or HAVING clause.
+	 * In MySQL, these can be disambiguated using the SELECT item list.
+	 *
+	 * For example, when tables "t1" and "t2" both have a column called "name",
+	 * the following query will cause an "ambiguous column name" error in SQLite,
+	 * but it will succeed in MySQL, using the "t1.name" from the SELECT clause:
+	 *
+	 *   SELECT t1.name FROM t1 JOIN t2 ON t2.t1_id = t1.id ORDER BY name
+	 *
+	 * This is because MySQL primarily considers the "name" column that was used
+	 * in the SELECT list - when it is unambiguous, it will be used in ORDER BY.
+	 *
+	 * To emulate this behavior in SQLite, we will search for unqualified column
+	 * references in the ORDER BY, GROUP BY, or HAVING item expression, and try
+	 * to qualify them using the SELECT item list.
+	 *
+	 * In other words, the above query will be rewritten as follows:
+	 *
+	 *   SELECT t1.name FROM t1 JOIN t2 ON t2.t1_id = t1.id ORDER BY t1.name
+	 *
+	 * Note that the ORDER BY column was rewritten from "name" to "t1.name".
+	 *
+	 * @TODO: When multi-database support is implemented, we'll also need to
+	 *        consider column references in forms like "db.table.column".
+	 *
+	 * @param  array          $disambiguation_map The SELECT item disambiguation map (column name => array of select items).
+	 *                                            @see WP_SQLite_Driver::create_select_item_disambiguation_map()
+	 * @param  WP_Parser_Node $expr               The expression AST node or subnode.
+	 * @return string|null                        The disambiguated and translated expression;
+	 *                                            null when the expression cannot be disambiguated.
+	 */
+	private function disambiguate_item( array $disambiguation_map, WP_Parser_Node $expr ) {
+		// Skip when there is no column in the expression (no "columnRef" node),
+		// or when the column is already qualified (has a "dotIdentifier" node).
+		$column_ref = $expr->get_first_descendant_node( 'columnRef' );
+		if ( ! $column_ref || $column_ref->get_first_descendant_node( 'dotIdentifier' ) ) {
+			return null;
+		}
+
+		// Support also parenthesized column references (e.g. "(id)").
+		$expr = $this->unnest_parenthesized_expression( $expr );
+
+		// Consider only simple and parenthesized column references (as per MySQL).
+		$expr_value   = $this->translate( $expr );
+		$column_value = $this->translate( $column_ref );
+		if ( $expr_value !== $column_value ) {
+			return null;
+		}
+
+		// Look for SELECT items that match the column reference.
+		$column_name         = $this->translate( $column_ref );
+		$select_item_matches = $disambiguation_map[ $column_name ] ?? array();
+
+		// When we find exactly one matching SELECT list item, we can disambiguate
+		// the column reference. Otherwise, fall back to the original expression.
+		if ( 1 === count( $select_item_matches ) ) {
+			return $select_item_matches[0];
+		}
+		return null;
+	}
+
+	/**
+	 * Create a SELECT item disambiguation map from a SELECT item list for use
+	 * with the ORDER BY, GROUP BY, and HAVING clause disambiguation algorithm.
+	 *
+	 * @see WP_SQLite_Driver::disambiguate_item()
+	 *
+	 * @param  WP_Parser_Node $select_item_list The "selectItemList" AST node.
+	 * @return array                            The SELECT item disambiguation map (column name => array of select items).
+	 */
+	private function create_select_item_disambiguation_map( WP_Parser_Node $select_item_list ): array {
+		// Create a map of SELECT item column names to their qualified values.
+		$disambiguation_map = array();
+		foreach ( $select_item_list->get_child_nodes() as $select_item ) {
+			/*
+			 * [GRAMMAR]
+			 * selectItem: tableWild | (expr selectAlias?)
+			 */
+
+			// Skip when a "tableWild" node is used (no "expr" node).
+			$select_item_expr = $select_item->get_first_child_node( 'expr' );
+			if ( ! $select_item_expr ) {
+				continue;
+			}
+
+			// A SELECT item alias always needs to be preserved as-is.
+			$alias = $select_item->get_first_child_node( 'selectAlias' );
+			if ( $alias ) {
+				$alias_value                        = $this->translate( $alias->get_first_child_node() );
+				$disambiguation_map[ $alias_value ] = array( $alias_value );
+				continue;
+			}
+
+			// Skip when there is no column listed (no "columnRef" node).
+			$select_column_ref = $select_item_expr->get_first_descendant_node( 'columnRef' );
+			if ( ! $select_column_ref ) {
+				continue;
+			}
+
+			// Skip when the column reference is not qualified (no "dotIdentifier" node).
+			$dot_identifiers = $select_column_ref->get_descendant_nodes( 'dotIdentifier' );
+			if ( 0 === count( $dot_identifiers ) ) {
+				continue;
+			}
+
+			// Support also parenthesized column references (e.g. "(t.id)").
+			$select_item_expr = $this->unnest_parenthesized_expression( $select_item_expr );
+
+			// Consider only simple and parenthesized column references (as per MySQL).
+			$expr_value   = $this->translate( $select_item_expr );
+			$column_value = $this->translate( $select_column_ref );
+			if ( $expr_value !== $column_value ) {
+				continue;
+			}
+
+			// The column name is the last "dotIdentifier" node.
+			$key = $this->translate( end( $dot_identifiers )->get_first_child_node() );
+
+			$disambiguation_map[ $key ]   = $disambiguation_map[ $key ] ?? array();
+			$disambiguation_map[ $key ][] = $column_value;
+		}
+		return $disambiguation_map;
+	}
+
+	/**
+	 * Analyze a "tableReferenceList" AST node and extract table data.
+	 *
+	 * This method extracts table data for all tables that are used at the root
+	 * level of a given query, including tables that are referenced using JOINs.
+	 *
+	 * The returned array maps table aliases to table names and additional data:
+	 *   - key:   table alias, or name if no alias is used
+	 *   - value: an array of table data
+	 *       - table_name: the real name of the table (null for derived tables)
+	 *       - table_expr: the table expression for a derived table (null for regular tables)
+	 *       - join_expr:  the join expression used for the table (null when no join is used)
+	 *
+	 * MySQL has a non-stand ardsyntax extension where a comma-separated list of
+	 * table references is allowed as a table reference in itself, for instance:
+	 *   SELECT * FROM (t1, t2) JOIN t3 ON 1
+	 *
+	 * Which is equivalent to:
+	 *   SELECT * FROM (t1 CROSS JOIN t2) JOIN t3 ON 1
+	 *
+	 * @param  WP_Parser_Node $node The "tableReferenceList" AST node.
+	 * @return array                The table reference map (table alias => array of table data).
+	 */
+	private function create_table_reference_map( WP_Parser_Node $node ): array {
+		$table_map = array();
+
+		// Collect all table references, including the ones used in JOINs.
+		$table_refs = array();
+		foreach ( $node->get_child_nodes( 'tableReference' ) as $table_ref ) {
+			$table_refs[] = $table_ref;
+			foreach ( $table_ref->get_child_nodes( 'joinedTable' ) as $joined_table ) {
+				$table_refs[] = $joined_table;
+			}
+		}
+
+		// Process each table reference, extracting table data.
+		foreach ( $table_refs as $table_ref ) {
+			$table_factor = $table_ref->get_first_descendant_node( 'tableFactor' );
+			$join_expr    = $table_ref->get_first_child_node( 'expr' );
+			$child        = $table_factor->get_first_child_node();
+
+			// Descend all "singleTableParens" nodes to get the "singleTable" node.
+			if ( 'singleTableParens' === $child->rule_name ) {
+				$child = $child->get_first_descendant_node( 'singleTable' );
+			}
+
+			if ( 'singleTable' === $child->rule_name ) {
+				// Extract data from the "singleTable" node.
+				$name       = $this->translate( $child->get_first_child_node( 'tableRef' ) );
+				$alias_node = $child->get_first_child_node( 'tableAlias' );
+				$alias      = $alias_node ? $this->translate( $alias_node->get_first_child_node( 'identifier' ) ) : null;
+
+				$table_map[ $this->unquote_sqlite_identifier( $alias ?? $name ) ] = array(
+					'table_name' => $this->unquote_sqlite_identifier( $name ),
+					'table_expr' => null,
+					'join_expr'  => $this->translate( $join_expr ),
+				);
+			} elseif ( 'derivedTable' === $child->rule_name ) {
+				// Extract data from the "derivedTable" node.
+				$subquery   = $child->get_first_descendant_node( 'subquery' );
+				$alias_node = $child->get_first_child_node( 'tableAlias' );
+				$alias      = $alias_node ? $this->translate( $alias_node->get_first_child_node( 'identifier' ) ) : null;
+
+				$table_map[ $this->unquote_sqlite_identifier( $alias ) ] = array(
+					'table_name' => null,
+					'table_expr' => $this->translate( $subquery ),
+					'join_expr'  => $this->translate( $join_expr ),
+				);
+			} elseif ( 'tableReferenceListParens' === $child->rule_name ) {
+				// Recursively process the "tableReferenceListParens" node.
+				$table_ref_list = $child->get_first_descendant_node( 'tableReferenceList' );
+				$table_map      = array_merge( $table_map, $this->create_table_reference_map( $table_ref_list ) );
+			}
+		}
+		return $table_map;
 	}
 
 	/**
@@ -3703,6 +4834,21 @@ class WP_SQLite_Driver {
 	}
 
 	/**
+	 * Get the database name as it is saved in the information schema tables.
+	 *
+	 * @param  string|null $db_name Optional. The database name to use. Defaults to the current database name.
+	 * @return string               The database name as it is saved in the information schema tables.
+	 */
+	private function get_saved_db_name( ?string $db_name = null ): string {
+		if ( null === $db_name ) {
+			$db_name = $this->db_name;
+		}
+		return $this->main_db_name === $db_name
+			? WP_SQLite_Information_Schema_Builder::SAVED_DATABASE_NAME
+			: $db_name;
+	}
+
+	/**
 	 * Generate a SQLite CREATE TABLE statement from information schema data.
 	 *
 	 * @param  bool        $table_is_temporary Whether the table is temporary.
@@ -3726,7 +4872,7 @@ class WP_SQLite_Driver {
 				AND table_schema = ?
 				AND table_name = ?
 			",
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetch( PDO::FETCH_ASSOC );
 
 		if ( false === $table_info ) {
@@ -3743,7 +4889,7 @@ class WP_SQLite_Driver {
 				'SELECT * FROM %s WHERE table_schema = ? AND table_name = ? ORDER BY ordinal_position',
 				$this->quote_sqlite_identifier( $columns_table )
 			),
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetchAll( PDO::FETCH_ASSOC );
 
 		// 3. Get index info, grouped by index name.
@@ -3766,7 +4912,7 @@ class WP_SQLite_Driver {
 				",
 				$this->quote_sqlite_identifier( $statistics_table )
 			),
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetchAll( PDO::FETCH_ASSOC );
 
 		$grouped_constraints = array();
@@ -3776,7 +4922,62 @@ class WP_SQLite_Driver {
 			$grouped_constraints[ $name ][ $seq ] = $constraint;
 		}
 
-		// 4. Generate CREATE TABLE statement columns.
+		// 4. Get foreign key info.
+		$referential_constraints_table = $this->information_schema_builder
+			->get_table_name( $table_is_temporary, 'referential_constraints' );
+		$referential_constraints_info  = $this->execute_sqlite_query(
+			sprintf(
+				'SELECT * FROM %s WHERE constraint_schema = ? AND table_name = ? ORDER BY constraint_name',
+				$this->quote_sqlite_identifier( $referential_constraints_table )
+			),
+			array( $this->get_saved_db_name(), $table_name )
+		)->fetchAll( PDO::FETCH_ASSOC );
+
+		$key_column_usage_map = array();
+		if ( count( $referential_constraints_info ) > 0 ) {
+			$key_column_usage_table = $this->information_schema_builder
+				->get_table_name( $table_is_temporary, 'key_column_usage' );
+			$key_column_usage_info  = $this->execute_sqlite_query(
+				sprintf(
+					'SELECT * FROM %s WHERE table_schema = ? AND table_name = ? AND referenced_column_name IS NOT NULL',
+					$this->quote_sqlite_identifier( $key_column_usage_table )
+				),
+				array( $this->get_saved_db_name(), $table_name )
+			)->fetchAll( PDO::FETCH_ASSOC );
+
+			$key_column_usage_map = array();
+			foreach ( $key_column_usage_info as $key_column_usage ) {
+				$constraint_name = $key_column_usage['CONSTRAINT_NAME'];
+				if ( ! isset( $key_column_usage_map[ $constraint_name ] ) ) {
+					$key_column_usage_map[ $constraint_name ] = array();
+				}
+				$key_column_usage_map[ $constraint_name ][] = array(
+					$key_column_usage['COLUMN_NAME'],
+					$key_column_usage['REFERENCED_COLUMN_NAME'],
+				);
+			}
+		}
+
+		// 5. Get CHECK constraint info.
+		$table_constraints_table = $this->information_schema_builder
+			->get_table_name( $table_is_temporary, 'table_constraints' );
+		$check_constraints_table = $this->information_schema_builder
+			->get_table_name( $table_is_temporary, 'check_constraints' );
+		$check_constraints_info  = $this->execute_sqlite_query(
+			sprintf(
+				'SELECT tc.*, cc.check_clause
+				FROM %s tc
+				JOIN %s cc ON cc.constraint_name = tc.constraint_name
+				WHERE tc.constraint_schema = ?
+				AND tc.table_name = ?
+				ORDER BY tc.constraint_name',
+				$this->quote_sqlite_identifier( $table_constraints_table ),
+				$this->quote_sqlite_identifier( $check_constraints_table )
+			),
+			array( $this->get_saved_db_name(), $table_name )
+		)->fetchAll( PDO::FETCH_ASSOC );
+
+		// 6. Generate CREATE TABLE statement columns.
 		$rows              = array();
 		$on_update_queries = array();
 		$has_autoincrement = false;
@@ -3853,7 +5054,7 @@ class WP_SQLite_Driver {
 			}
 		}
 
-		// 5. Generate CREATE TABLE statement constraints, collect indexes.
+		// 6. Generate CREATE TABLE statement constraints, collect indexes.
 		$create_index_queries = array();
 		foreach ( $grouped_constraints as $constraint ) {
 			ksort( $constraint );
@@ -3912,7 +5113,61 @@ class WP_SQLite_Driver {
 			}
 		}
 
-		// 6. Compose the CREATE TABLE statement.
+		// 8. Add foreign key constraints.
+		foreach ( $referential_constraints_info as $referential_constraint ) {
+			$column_names            = array();
+			$referenced_column_names = array();
+			foreach ( $key_column_usage_map[ $referential_constraint['CONSTRAINT_NAME'] ] as $info ) {
+				$column_names[]            = $this->quote_sqlite_identifier( $info[0] );
+				$referenced_column_names[] = $this->quote_sqlite_identifier( $info[1] );
+			}
+			$query = sprintf(
+				'  CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s)',
+				$this->quote_sqlite_identifier( $referential_constraint['CONSTRAINT_NAME'] ),
+				implode( ', ', $column_names ),
+				$this->quote_sqlite_identifier( $referential_constraint['REFERENCED_TABLE_NAME'] ),
+				implode( ', ', $referenced_column_names )
+			);
+
+			// ON DELETE
+			$delete_rule = $referential_constraint['DELETE_RULE'];
+			if ( 'NO ACTION' === $delete_rule ) {
+				// In MySQL, NO ACTION is equivalent to RESTRICT with InnoDB.
+				$delete_rule = 'RESTRICT';
+			}
+			$query .= sprintf( ' ON DELETE %s', $delete_rule );
+
+			// ON UPDATE
+			$update_rule = $referential_constraint['UPDATE_RULE'];
+			if ( 'NO ACTION' === $update_rule ) {
+				// In MySQL, NO ACTION is equivalent to RESTRICT with InnoDB.
+				$update_rule = 'RESTRICT';
+			}
+			$query .= sprintf( ' ON UPDATE %s', $update_rule );
+
+			$rows[] = $query;
+		}
+
+		// 9. Add CHECK constraints.
+		foreach ( $check_constraints_info as $check_constraint ) {
+			if ( 'NO' === $check_constraint['ENFORCED'] ) {
+				continue;
+			}
+
+			// Translate the check clause from MySQL to SQLite.
+			$ast          = $this->create_parser( 'SELECT ' . $check_constraint['CHECK_CLAUSE'] )->parse();
+			$expr         = $ast->get_first_descendant_node( 'selectItem' )->get_first_child_node();
+			$check_clause = $this->translate( $expr );
+
+			$sql    = sprintf(
+				'  CONSTRAINT %s CHECK %s',
+				$this->quote_sqlite_identifier( $check_constraint['CONSTRAINT_NAME'] ),
+				$check_clause
+			);
+			$rows[] = $sql;
+		}
+
+		// 10. Compose the CREATE TABLE statement.
 		$create_table_query  = sprintf(
 			"CREATE %sTABLE %s (\n",
 			$table_is_temporary ? 'TEMPORARY ' : '',
@@ -3941,7 +5196,7 @@ class WP_SQLite_Driver {
 				AND table_schema = ?
 				AND table_name = ?
 			",
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetch( PDO::FETCH_ASSOC );
 
 		if ( false === $table_info ) {
@@ -3961,7 +5216,7 @@ class WP_SQLite_Driver {
 				',
 				$this->quote_sqlite_identifier( $columns_table )
 			),
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetchAll( PDO::FETCH_ASSOC );
 
 		// 3. Get index info, grouped by index name.
@@ -3984,7 +5239,7 @@ class WP_SQLite_Driver {
 				",
 				$this->quote_sqlite_identifier( $statistics_table )
 			),
-			array( $this->db_name, $table_name )
+			array( $this->get_saved_db_name(), $table_name )
 		)->fetchAll( PDO::FETCH_ASSOC );
 
 		$grouped_constraints = array();
@@ -3994,7 +5249,62 @@ class WP_SQLite_Driver {
 			$grouped_constraints[ $name ][ $seq ] = $constraint;
 		}
 
-		// 4. Generate CREATE TABLE statement columns.
+		// 4. Get foreign key info.
+		$referential_constraints_table = $this->information_schema_builder
+			->get_table_name( $table_is_temporary, 'referential_constraints' );
+		$referential_constraints_info  = $this->execute_sqlite_query(
+			sprintf(
+				'SELECT * FROM %s WHERE constraint_schema = ? AND table_name = ? ORDER BY constraint_name',
+				$this->quote_sqlite_identifier( $referential_constraints_table )
+			),
+			array( $this->get_saved_db_name(), $table_name )
+		)->fetchAll( PDO::FETCH_ASSOC );
+
+		$key_column_usage_map = array();
+		if ( count( $referential_constraints_info ) > 0 ) {
+			$key_column_usage_table = $this->information_schema_builder
+				->get_table_name( $table_is_temporary, 'key_column_usage' );
+			$key_column_usage_info  = $this->execute_sqlite_query(
+				sprintf(
+					'SELECT * FROM %s WHERE table_schema = ? AND table_name = ? AND referenced_column_name IS NOT NULL',
+					$this->quote_sqlite_identifier( $key_column_usage_table )
+				),
+				array( $this->get_saved_db_name(), $table_name )
+			)->fetchAll( PDO::FETCH_ASSOC );
+
+			$key_column_usage_map = array();
+			foreach ( $key_column_usage_info as $key_column_usage ) {
+				$constraint_name = $key_column_usage['CONSTRAINT_NAME'];
+				if ( ! isset( $key_column_usage_map[ $constraint_name ] ) ) {
+					$key_column_usage_map[ $constraint_name ] = array();
+				}
+				$key_column_usage_map[ $constraint_name ][] = array(
+					$key_column_usage['COLUMN_NAME'],
+					$key_column_usage['REFERENCED_COLUMN_NAME'],
+				);
+			}
+		}
+
+		// 5. Get CHECK constraint info.
+		$table_constraints_table = $this->information_schema_builder
+			->get_table_name( $table_is_temporary, 'table_constraints' );
+		$check_constraints_table = $this->information_schema_builder
+			->get_table_name( $table_is_temporary, 'check_constraints' );
+		$check_constraints_info  = $this->execute_sqlite_query(
+			sprintf(
+				'SELECT tc.*, cc.check_clause
+				FROM %s tc
+				JOIN %s cc ON cc.constraint_name = tc.constraint_name
+				WHERE tc.constraint_schema = ?
+				AND tc.table_name = ?
+				ORDER BY tc.constraint_name',
+				$this->quote_sqlite_identifier( $table_constraints_table ),
+				$this->quote_sqlite_identifier( $check_constraints_table )
+			),
+			array( $this->get_saved_db_name(), $table_name )
+		)->fetchAll( PDO::FETCH_ASSOC );
+
+		// 6. Generate CREATE TABLE statement columns.
 		$rows = array();
 		foreach ( $column_info as $column ) {
 			$sql  = '  ';
@@ -4038,7 +5348,7 @@ class WP_SQLite_Driver {
 			$rows[] = $sql;
 		}
 
-		// 4. Generate CREATE TABLE statement constraints, collect indexes.
+		// 7. Generate CREATE TABLE statement constraints, collect indexes.
 		foreach ( $grouped_constraints as $constraint ) {
 			ksort( $constraint );
 			$info = $constraint[1];
@@ -4095,7 +5405,42 @@ class WP_SQLite_Driver {
 			$rows[] = $sql;
 		}
 
-		// 5. Compose the CREATE TABLE statement.
+		// 8. Add foreign key constraints.
+		foreach ( $referential_constraints_info as $referential_constraint ) {
+			$column_names            = array();
+			$referenced_column_names = array();
+			foreach ( $key_column_usage_map[ $referential_constraint['CONSTRAINT_NAME'] ] as $info ) {
+				$column_names[]            = $this->quote_mysql_identifier( $info[0] );
+				$referenced_column_names[] = $this->quote_mysql_identifier( $info[1] );
+			}
+			$sql = sprintf(
+				'  CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s)',
+				$this->quote_mysql_identifier( $referential_constraint['CONSTRAINT_NAME'] ),
+				implode( ', ', $column_names ),
+				$this->quote_mysql_identifier( $referential_constraint['REFERENCED_TABLE_NAME'] ),
+				implode( ', ', $referenced_column_names )
+			);
+			if ( 'NO ACTION' !== $referential_constraint['DELETE_RULE'] ) {
+				$sql .= sprintf( ' ON DELETE %s', $referential_constraint['DELETE_RULE'] );
+			}
+			if ( 'NO ACTION' !== $referential_constraint['UPDATE_RULE'] ) {
+				$sql .= sprintf( ' ON UPDATE %s', $referential_constraint['UPDATE_RULE'] );
+			}
+			$rows[] = $sql;
+		}
+
+		// 9. Add CHECK constraints.
+		foreach ( $check_constraints_info as $check_constraint ) {
+			$sql    = sprintf(
+				'  CONSTRAINT %s CHECK %s%s',
+				$this->quote_mysql_identifier( $check_constraint['CONSTRAINT_NAME'] ),
+				$check_constraint['CHECK_CLAUSE'],
+				'NO' === $check_constraint['ENFORCED'] ? ' /*!80016 NOT ENFORCED */' : ''
+			);
+			$rows[] = $sql;
+		}
+
+		// 10. Compose the CREATE TABLE statement.
 		$collation = $table_info['TABLE_COLLATION'];
 		$charset   = substr( $collation, 0, strpos( $collation, '_' ) );
 
@@ -4268,6 +5613,7 @@ class WP_SQLite_Driver {
 		$this->last_sqlite_queries = array();
 		$this->last_result         = null;
 		$this->last_return_value   = null;
+		$this->last_column_meta    = array();
 		$this->is_readonly         = false;
 	}
 
@@ -4388,6 +5734,22 @@ class WP_SQLite_Driver {
 						$e->get_data()['column_name']
 					),
 					'42000'
+				);
+			case WP_SQLite_Information_Schema_Exception::TYPE_CONSTRAINT_DOES_NOT_EXIST:
+				return $this->new_driver_exception(
+					sprintf(
+						"SQLSTATE[HY000]: General error: 3940 Constraint '%s' does not exist.",
+						$e->get_data()['name']
+					),
+					'HY000'
+				);
+			case WP_SQLite_Information_Schema_Exception::TYPE_MULTIPLE_CONSTRAINTS_WITH_NAME:
+				return $this->new_driver_exception(
+					sprintf(
+						"SQLSTATE[HY000]: General error: 3939 Table has multiple constraints with the name '%s'. Please use constraint specific 'DROP' clause.",
+						$e->get_data()['name']
+					),
+					'HY000'
 				);
 			default:
 				return $e;

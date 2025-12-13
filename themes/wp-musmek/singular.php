@@ -12,6 +12,7 @@
       } elseif ( is_single() ) {
         get_template_part( 'template-parts/sections/post' );
         get_template_part( 'template-parts/sections/links' );
+        get_template_part( 'template-parts/sections/post-form' );
         get_template_part( 'template-parts/sections/faq' );
       } elseif ( is_front_page() ) {
         get_template_part( 'template-parts/sections/text' );

@@ -64,6 +64,7 @@
                 <p class="p-the-footer__list-label">Navigation</p>
 
                 <?php wp_nav_menu( array (
+                  'menu'       => 'footer',
                   'menu_class' => 'p-the-footer__list',
                   'container'  => false
                 ) ); ?>

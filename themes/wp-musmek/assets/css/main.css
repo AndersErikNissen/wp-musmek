@@ -104,8 +104,13 @@ img {
   background-color: var(--color-orange);
 }
 
-.btn:hover,
-.btn--cta:hover {
+.btn:disabled,
+.btn--cta:disabled {
+  opacity: 0.5;
+}
+
+.btn:hover:not(:disabled),
+.btn--cta:hover:not(:disabled) {
   border-radius: 1rem;
 }
 
@@ -278,7 +283,7 @@ img {
 }
 
 .wpcf7-form .label-text,
-input.wpcf7-form-control {
+input.wpcf7-form-control:not(.btn--cta) {
   font-size: 1rem;
   line-height: 1;
   background-color: var(--color-white);
@@ -306,8 +311,8 @@ input.wpcf7-form-control {
 }
 
 .wpcf7-not-valid-tip {
-  margin-top: 0.25rem;
-  color: var(--color-orange);
+  margin-top: 0.5rem;
+  color: #ff4328;
 }
 
 .wpcf7-form input:focus-visible,
@@ -333,4 +338,22 @@ textarea.wpcf7-form-control {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.wpcf7 form .wpcf7-response-output {
+  border-radius: 0.5rem;
+  padding: 2rem;
+}
+
+.wpcf7-form [type="checkbox"] {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.wpcf7-acceptance .wpcf7-list-item {
+  margin: 0;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-grey);
+  color: var(--color-dark-green);
 }

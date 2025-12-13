@@ -49,6 +49,7 @@
           </div>
 
           <?php wp_nav_menu( array (
+            'menu'       => 'header',
             'menu_class' => 'p-the-header__menu menu hidden-tablet',
             'container'  => 'ul'
           ) ); ?>
@@ -79,6 +80,7 @@
       <div class="mobile-menu">
         <div class="mobile-menu__content">
           <?php wp_nav_menu( array (
+            'menu'       => 'header',
             'menu_class' => 'mobile-menu__menu',
             'container'  => 'ul'
           ) ); ?>

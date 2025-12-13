@@ -109,10 +109,6 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.rte h1 {
-  margin: 0 0 1rem;
-}
-
 .h2,
 .rte h2 {
   font-size: 1.5rem;
@@ -298,6 +294,12 @@ body {
 .rte ol li::marker {
   content: counter(listCounter, decimal-leading-zero);
   font-weight: 300;
+}
+
+.rte a,
+.link {
+  text-decoration: underline;
+  font-weight: 500;
 }
 
 .rte blockquote {
