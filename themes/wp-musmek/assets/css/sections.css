@@ -337,15 +337,68 @@
 
 .section-cards__card {
   padding: 2rem;
-  color: var(--color-dark-orange);
-  background-color: var(--color-green);
   border-radius: 2rem;
+  background-color: transparent;
+  border-width: 2px;
+  border-style: solid;
 }
 
 @media (min-width: 768px) {
   .section-cards__cards {
     grid-template-columns: repeat(var(--columns, 2), 1fr);
   }
+}
+
+.section-cards__card .rte ul li {
+  padding: 1rem 0;
+}
+
+.section-cards__card .rte li::before, 
+.section-cards__card .rte li:last-child::after {
+  background-color: currentColor;
+  opacity: 0.7;
+}
+
+.section-cards__card-sub-title {
+  display: block;
+  margin-top: 2rem;
+}
+
+.section-cards__card-large-sub-title {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+/* Coloring of the cards */
+.card-theme0 {
+  color: var(--color-black);
+  border-color: var(--color-black);
+}
+
+.card-theme0.highlight {
+  color: var(--color-white);
+  background-color: var(--color-black);
+}
+
+.card-theme1 {
+  color: var(--color-dark-green);
+  border-color: var(--color-dark-green);
+}
+
+.card-theme1.highlight {
+  color: var(--color-orange);
+  background-color: var(--color-dark-green);
+}
+
+.card-theme2 {
+  color: var(--color-dark-pink);
+  border-color: var(--color-dark-pink);
+}
+
+.card-theme2.highlight {
+  color: var(--color-dark-green);
+  border-color: var(--color-pink);
+  background-color: var(--color-pink);
 }
 
 /* SECTION: LINKS */

@@ -304,6 +304,11 @@ input.wpcf7-form-control:not(.btn--cta) {
   transition: transform 150ms ease-in, color 150ms ease-in;
 }
 
+.wpcf7-form .label-text-outside {
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
 .wpcf7-form > p:focus-within .label-text,
 .label-text.has-value  {
   color: var(--color-dark-grey);
@@ -327,6 +332,39 @@ textarea.wpcf7-form-control {
   border: 1px solid transparent;
   padding: 1.5rem 1.25rem 1rem;
   width: 100%;
+}
+
+.wpcf7-radio {
+  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.wpcf7-radio .wpcf7-list-item {
+  position: relative;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-white);
+}
+
+.wpcf7-radio .wpcf7-list-item,
+.wpcf7-radio .wpcf7-list-item > label {
+  cursor: pointer;
+}
+
+.wpcf7-radio .wpcf7-list-item input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.wpcf7-radio .wpcf7-list-item:has(input:checked) {
+  color: var(--color-dark-green);
+  background-color: var(--color-grey);
 }
 
 .wpcf7-form .btn {

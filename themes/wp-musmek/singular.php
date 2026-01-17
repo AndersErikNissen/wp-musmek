@@ -28,6 +28,7 @@
         get_template_part( 'template-parts/sections/content' );
         get_template_part( 'template-parts/sections/services' );
         get_template_part( 'template-parts/sections/cards' );
+        get_template_part( 'template-parts/sections/post-form' );
         get_template_part( 'template-parts/sections/faq' );
       }
     endwhile;
